@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action;
+package top.bogey.touch_tool.bean.action.parent;
 
 import top.bogey.touch_tool.bean.task.Task;
 

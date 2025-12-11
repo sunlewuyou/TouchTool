@@ -3,7 +3,7 @@ package top.bogey.touch_tool.bean.action.normal;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.ExecuteAction;
+import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.StickScreenFloatView;

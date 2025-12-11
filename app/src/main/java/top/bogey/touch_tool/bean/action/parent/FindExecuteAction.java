@@ -1,8 +1,9 @@
-package top.bogey.touch_tool.bean.action;
+package top.bogey.touch_tool.bean.action.parent;
 
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;

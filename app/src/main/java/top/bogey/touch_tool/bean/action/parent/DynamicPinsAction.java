@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action;
+package top.bogey.touch_tool.bean.action.parent;
 
 import java.util.List;
 

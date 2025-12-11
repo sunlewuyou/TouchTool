@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.DynamicTypePinsAction;
-import top.bogey.touch_tool.bean.action.ExecuteAction;
+import top.bogey.touch_tool.bean.action.parent.DynamicTypePinsAction;
+import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.task.Task;
 

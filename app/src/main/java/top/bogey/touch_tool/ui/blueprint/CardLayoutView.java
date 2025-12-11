@@ -36,6 +36,7 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -72,7 +73,6 @@ import top.bogey.touch_tool.ui.blueprint.history.edit.PinUpdateHistory;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByPinDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
-import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener, IHistoryOwner {
@@ -124,6 +124,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private final Map<String, ActionCard> cards = new HashMap<>();
     private Task task;
+    private List<Action> actions;
     private HistoryManager history;
 
     private boolean editable = true;
@@ -204,15 +205,34 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         cards.values().forEach(this::removeView);
         cards.clear();
 
-        task.getActions().forEach(action -> {
-            if (action instanceof SyncAction syncAction) syncAction.sync(task);
-            ActionCard card = newCard(action);
-            cards.put(action.getId(), card);
-            addView(card);
+        actions = task.getActions();
+        actions.sort((o1, o2) -> {
+            Point pos1 = o1.getPos();
+            Point pos2 = o2.getPos();
+            return (pos1.x + pos1.y) - (pos2.x + pos2.y);
         });
-        checkCards();
-        invalidate();
-        updateCardsPos();
+        loadCards(0);
+    }
+
+    private void loadCards(int index) {
+        postDelayed(() -> {
+            Map<String, ActionCard> cardMap = new HashMap<>();
+            for (int i = index; i < index + 5; i++) {
+                if (i >= actions.size()) {
+                    updateCardsPos(cardMap);
+                    checkCards();
+                    return;
+                }
+                Action action = actions.get(i);
+                if (action instanceof SyncAction syncAction) syncAction.sync(task);
+                ActionCard card = newCard(actions.get(i));
+                cards.put(action.getId(), card);
+                cardMap.put(action.getId(), card);
+                addView(card);
+            }
+            updateCardsPos(cardMap);
+            loadCards(index + 5);
+        }, 50);
     }
 
     public ActionCard newCard(Action action) {
@@ -294,14 +314,17 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         RectF area = getCardArea(card);
         area.offset(offsetX, offsetY);
-
         RectF windowSize = new RectF(0, 0, getWidth(), getHeight());
         boolean intersects = RectF.intersects(windowSize, area);
         boolean contains = windowSize.contains(area);
-        card.setVisibility(intersects || contains ? VISIBLE : INVISIBLE);
+        card.setNeedDraw(intersects || contains);
     }
 
     public void updateCardsPos() {
+        updateCardsPos(cards);
+    }
+
+    public void updateCardsPos(Map<String, ActionCard> cards) {
         cards.values().forEach(card -> {
             updateCardPos(card);
             if (card instanceof ShowTextActionCard) card.bringToFront();
@@ -837,7 +860,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         drawBackground(canvas, offsetX, offsetY, gridSize);
 
 
-
         CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize * CORNER_OFFSET_SCALE / 2);
         linkPaint.setPathEffect(cornerPathEffect);
 
@@ -859,6 +881,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     if (actionCard == null) return;
 
                     if (selectedCards.contains(actionCard)) return;
+
+                    if (!card.isNeedDraw() && !actionCard.isNeedDraw()) return;
 
                     PinView pinView = actionCard.getPinView(key);
                     if (pinView == null) return;
@@ -891,6 +915,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     ActionCard actionCard = cards.get(value);
 
                     if (actionCard == null) return;
+
+                    if (!card.isNeedDraw() && !actionCard.isNeedDraw()) return;
 
                     PinView pinView = actionCard.getPinView(key);
                     if (pinView == null) return;

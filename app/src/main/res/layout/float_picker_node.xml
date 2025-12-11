@@ -126,6 +126,7 @@
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/typeGroup"
+                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 app:selectionRequired="true"

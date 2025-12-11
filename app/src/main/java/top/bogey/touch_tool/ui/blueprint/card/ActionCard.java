@@ -2,11 +2,14 @@ package top.bogey.touch_tool.ui.blueprint.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -36,6 +39,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     protected final Map<String, PinView> pinViews = new HashMap<>();
     private boolean needDelete = false;
+    private boolean needDraw = true;
 
     private MaterialTextView posView;
 
@@ -192,6 +196,12 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         if (posView != null) posView.setText(action.getPos().x + "," + action.getPos().y);
     }
 
+    @Override
+    public void draw(@NonNull Canvas canvas) {
+        if (!needDraw) return;
+        super.draw(canvas);
+    }
+
     public void startFocusAnim() {
         AlphaAnimation animation = new AlphaAnimation(1f, 0.5f);
         animation.setDuration(200);
@@ -317,6 +327,14 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     public void onPinChanged(Pin pin) {
         pinViews.forEach((id, pinView) -> pinView.expand(action.getExpandType()));
         check();
+    }
+
+    public void setNeedDraw(boolean needDraw) {
+        this.needDraw = needDraw;
+    }
+
+    public boolean isNeedDraw() {
+        return needDraw;
     }
 
     public Task getTask() {

@@ -24,6 +24,7 @@ android {
         versionCode = code
         versionName = now
 
+        @Suppress("UnstableApiUsage")
         externalNativeBuild {
             cmake {
                 cppFlags += listOf("-std=c++14", "-Wno-format")
@@ -32,7 +33,6 @@ android {
         }
 
         ndk {
-            //noinspection ChromeOsAbiSupport
             abiFilters.add("arm64-v8a")
         }
     }
@@ -55,7 +55,7 @@ android {
         outputs.all {
             if (buildType.name == "release") {
                 val impl = this as BaseVariantOutputImpl
-                impl.outputFileName = "点击助手_$now($code).APK"
+                impl.outputFileName = "点击助手_${now}_${code}.APK"
             }
         }
     }

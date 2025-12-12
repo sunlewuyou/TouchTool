@@ -20,8 +20,8 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.log.ActionLog;
-import top.bogey.touch_tool.bean.log.LogInfo;
+import top.bogey.touch_tool.bean.other.log.ActionLog;
+import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.LogSaveListener;
 import top.bogey.touch_tool.bean.save.log.LogSaver;

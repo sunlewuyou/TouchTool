@@ -7,13 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SearchHistprySaver {
-    private static SearchHistprySaver instance;
+public class SearchHistorySaver {
+    private static SearchHistorySaver instance;
 
-    public static SearchHistprySaver getInstance() {
-        synchronized (SearchHistprySaver.class) {
+    public static SearchHistorySaver getInstance() {
+        synchronized (SearchHistorySaver.class) {
             if (instance == null) {
-                instance = new SearchHistprySaver();
+                instance = new SearchHistorySaver();
             }
         }
         return instance;

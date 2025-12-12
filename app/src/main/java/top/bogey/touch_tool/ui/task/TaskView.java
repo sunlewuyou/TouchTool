@@ -35,7 +35,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.other.Usage;
-import top.bogey.touch_tool.bean.save.SearchHistprySaver;
+import top.bogey.touch_tool.bean.save.SearchHistorySaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -161,7 +161,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         binding.searchView.getEditText().setOnEditorActionListener((textView, i, keyEvent) -> {
             Editable text = binding.searchView.getText();
             String textString = text.toString();
-            SearchHistprySaver.getInstance().addSearchHistory(textString);
+            SearchHistorySaver.getInstance().addSearchHistory(textString);
             refreshSearchHistory();
             binding.searchBar.setText(textString);
             resetTags();
@@ -170,7 +170,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         });
 
         binding.cleanButton.setOnClickListener(v -> {
-            SearchHistprySaver.getInstance().cleanSearchHistory();
+            SearchHistorySaver.getInstance().cleanSearchHistory();
             refreshSearchHistory();
         });
         refreshSearchHistory();
@@ -281,11 +281,11 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
 
     public void refreshSearchHistory() {
         binding.historyBox.removeAllViews();
-        for (String history : SearchHistprySaver.getInstance().getSearchHistory()) {
+        for (String history : SearchHistorySaver.getInstance().getSearchHistory()) {
             ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.historyBox, true);
             Chip chip = itemBinding.getRoot();
             chip.setOnCloseIconClickListener(v -> {
-                SearchHistprySaver.getInstance().removeSearchHistory(history);
+                SearchHistorySaver.getInstance().removeSearchHistory(history);
                 binding.historyBox.removeView(chip);
             });
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.log.LogInfo;
+import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class LogSaver {

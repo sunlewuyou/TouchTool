@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import java.lang.reflect.Type;
 
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.log.Log;
-import top.bogey.touch_tool.bean.log.LogInfo;
+import top.bogey.touch_tool.bean.other.log.Log;
+import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;

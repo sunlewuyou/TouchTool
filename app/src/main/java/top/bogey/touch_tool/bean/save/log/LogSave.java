@@ -2,7 +2,7 @@ package top.bogey.touch_tool.bean.save.log;
 
 import com.tencent.mmkv.MMKV;
 
-import top.bogey.touch_tool.bean.log.LogInfo;
+import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.tree.ILazyTreeNodeData;
 import top.bogey.touch_tool.utils.tree.ITreeNodeDataLoader;

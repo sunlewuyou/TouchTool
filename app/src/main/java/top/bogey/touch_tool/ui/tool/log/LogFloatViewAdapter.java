@@ -16,11 +16,11 @@ import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.log.ActionLog;
-import top.bogey.touch_tool.bean.log.DateTimeLog;
-import top.bogey.touch_tool.bean.log.Log;
-import top.bogey.touch_tool.bean.log.LogInfo;
-import top.bogey.touch_tool.bean.log.NormalLog;
+import top.bogey.touch_tool.bean.other.log.ActionLog;
+import top.bogey.touch_tool.bean.other.log.DateTimeLog;
+import top.bogey.touch_tool.bean.other.log.Log;
+import top.bogey.touch_tool.bean.other.log.LogInfo;
+import top.bogey.touch_tool.bean.other.log.NormalLog;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;

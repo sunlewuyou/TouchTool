@@ -18,8 +18,10 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinLeftCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinTopCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
+import top.bogey.touch_tool.utils.ui.IDragableRecycleViewAdapter;
 
-public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<CustomActionCardRecycleViewAdapter.ViewHolder> {
+public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<CustomActionCardRecycleViewAdapter.ViewHolder> implements IDragableRecycleViewAdapter {
     private final List<PinView> pinViews = new ArrayList<>();
     private final ActionCard card;
 
@@ -76,10 +78,10 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
         }
     }
 
-    public void swapPin(int from, int to) {
+    @Override
+    public void swap(int from, int to) {
         Pin fromPin = pinViews.get(from).getPin();
         Pin toPin = pinViews.get(to).getPin();
-
         Collections.swap(pinViews, from, to);
 
         List<Pin> pins = card.getAction().getPins();
@@ -110,46 +112,6 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
             ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
             layoutParams.width = pinView.getPin().isVertical() ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
             layout.setLayoutParams(layoutParams);
-        }
-    }
-
-    public static class HorizontalDragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
-        private final CustomActionCardRecycleViewAdapter adapter;
-
-        public HorizontalDragViewHolderHelper(CustomActionCardRecycleViewAdapter adapter) {
-            super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
-            this.adapter = adapter;
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
-            adapter.swapPin(source.getBindingAdapterPosition(), target.getBindingAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-        }
-    }
-
-    public static class VerticalDragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
-        private final CustomActionCardRecycleViewAdapter adapter;
-
-        public VerticalDragViewHolderHelper(CustomActionCardRecycleViewAdapter adapter) {
-            super(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
-            this.adapter = adapter;
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
-            adapter.swapPin(source.getBindingAdapterPosition(), target.getBindingAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
         }
     }
 }

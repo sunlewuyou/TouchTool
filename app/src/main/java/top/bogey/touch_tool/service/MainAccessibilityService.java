@@ -45,10 +45,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,10 +68,9 @@ import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.thread.TaskQueue;
-import top.bogey.touch_tool.utils.thread.TaskThreadPoolExecutor;
 
 public class MainAccessibilityService extends AccessibilityService {
     static {
@@ -201,8 +197,6 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     // 任务 ----------------------------------------------------------------------------- start
-    private final ExecutorService taskService = new TaskThreadPoolExecutor(5, 30, 30, TimeUnit.SECONDS, new TaskQueue<>(20));
-
     private final Set<TaskRunnable> tasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final Set<ITaskListener> listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -243,7 +237,7 @@ public class MainAccessibilityService extends AccessibilityService {
         tasks.add(runnable);
 
         listeners.stream().filter(Objects::nonNull).forEach(runnable::addListener);
-        Future<?> future = taskService.submit(runnable);
+        Future<?> future = ThreadUtil.submitTask(runnable);
         runnable.setFuture(future);
         return runnable;
     }
@@ -486,7 +480,6 @@ public class MainAccessibilityService extends AccessibilityService {
     // 截图 ----------------------------------------------------------------------------- start
 
     private WeakReference<Bitmap> screenShot = new WeakReference<>(null);
-    private final ExecutorService captureExecutorService = Executors.newSingleThreadExecutor();
 
     public synchronized Bitmap getScreenShotByCapture() {
         if (captureBinder == null) return screenShot.get();
@@ -499,7 +492,7 @@ public class MainAccessibilityService extends AccessibilityService {
     public synchronized Bitmap getScreenShotByAccessibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             CompletableFuture<Bitmap> future = new CompletableFuture<>();
-            takeScreenshot(0, captureExecutorService, new TakeScreenshotCallback() {
+            takeScreenshot(0, ThreadUtil.getExecutorService(), new TakeScreenshotCallback() {
                 @Override
                 public void onSuccess(@NonNull ScreenshotResult result) {
                     try (HardwareBuffer hardwareBuffer = result.getHardwareBuffer()) {

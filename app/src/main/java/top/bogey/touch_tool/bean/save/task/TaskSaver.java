@@ -16,6 +16,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.other.Usage;
+import top.bogey.touch_tool.bean.save.TagSaver;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -127,8 +128,10 @@ public class TaskSaver {
                 emptyTag = true;
             }
         }
-        List<String> list = new ArrayList<>(tags);
-        AppUtil.chineseSort(list, tag -> tag);
+        List<String> list = new ArrayList<>();
+        for (String tag : TagSaver.getInstance().getTags()) {
+            if (tags.contains(tag)) list.add(tag);
+        }
         if (emptyTag || saves.isEmpty()) list.add(EMPTY_TAG);
         return list;
     }

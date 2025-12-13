@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
+import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 
 public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapter.ViewHolder> {
 
@@ -89,6 +91,10 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
 
             adapter = new TaskPageItemRecyclerViewAdapter(taskView);
             binding.getRoot().setAdapter(adapter);
+            DragViewHolderHelper helper = new DragViewHolderHelper(DragViewHolderHelper.HORIZONTAL | DragViewHolderHelper.VERTICAL, adapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(helper);
+            touchHelper.attachToRecyclerView(binding.getRoot());
+            adapter.setHelper(touchHelper);
         }
 
         public void refresh(String tag) {

@@ -3,6 +3,7 @@ package top.bogey.touch_tool.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import java.lang.reflect.Type;
 
@@ -39,11 +40,21 @@ public class GsonUtil {
             .create();
 
     public static <T> T copy(T src, Class<T> clazz) {
-        return gson.fromJson(gson.toJson(src), clazz);
+        try {
+            return gson.fromJson(gson.toJson(src), clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static <T> T copy(T src, Type typeOfSrc) {
-        return gson.fromJson(gson.toJson(src), typeOfSrc);
+        try {
+            return gson.fromJson(gson.toJson(src), typeOfSrc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String toJson(Object src) {
@@ -52,63 +63,99 @@ public class GsonUtil {
 
     public static <T> T getAsObject(JsonObject jsonObject, String key, Class<T> clazz, T defaultValue) {
         if (jsonObject.has(key)) {
-            return gson.fromJson(jsonObject.get(key), clazz);
+            try {
+                return gson.fromJson(jsonObject.get(key), clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static <T> T getAsObject(JsonObject jsonObject, String key, Type typeOfSrc, T defaultValue) {
         if (jsonObject.has(key)) {
-            return gson.fromJson(jsonObject.get(key), typeOfSrc);
+            try {
+                return gson.fromJson(jsonObject.get(key), typeOfSrc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static <T> T getAsObject(String json, Class<T> clazz, T defaultValue) {
         if (json != null) {
-            return gson.fromJson(json, clazz);
+            try {
+                return gson.fromJson(json, clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static <T> T getAsObject(String json, Type typeOfSrc, T defaultValue) {
         if (json != null) {
-            return gson.fromJson(json, typeOfSrc);
+            try {
+                return gson.fromJson(json, typeOfSrc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static int getAsInt(JsonObject jsonObject, String key, int defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsInt();
+            try {
+                return jsonObject.get(key).getAsInt();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static float getAsFloat(JsonObject jsonObject, String key, float defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsFloat();
+            try {
+                return jsonObject.get(key).getAsFloat();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static long getAsLong(JsonObject jsonObject, String key, long defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsLong();
+            try {
+                return jsonObject.get(key).getAsLong();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static double getAsDouble(JsonObject jsonObject, String key, double defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsDouble();
+            try {
+                return jsonObject.get(key).getAsDouble();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
 
     public static boolean getAsBoolean(JsonObject jsonObject, String key, boolean defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsBoolean();
+            try {
+                return jsonObject.get(key).getAsBoolean();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }
@@ -116,7 +163,11 @@ public class GsonUtil {
 
     public static String getAsString(JsonObject jsonObject, String key, String defaultValue) {
         if (jsonObject.has(key)) {
-            return jsonObject.get(key).getAsString();
+            try {
+                return jsonObject.get(key).getAsString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return defaultValue;
     }

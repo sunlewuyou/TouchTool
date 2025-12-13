@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom">
@@ -14,15 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.google.android.material.chip.ChipGroup
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tagBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:clipChildren="false"
             android:paddingBottom="96dp"
-            app:chipSpacingHorizontal="4dp"
-            app:chipSpacingVertical="0dp" />
+            app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+            tools:listitem="@layout/view_tag_list_item" />
 
     </LinearLayout>
 

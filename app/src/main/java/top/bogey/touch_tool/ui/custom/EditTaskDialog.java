@@ -104,13 +104,6 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
     private void createChip(String tag) {
         ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.tagBox, true);
         Chip chip = itemBinding.getRoot();
-        chip.setOnCloseIconClickListener(v -> AppUtil.showDialog(getContext(), R.string.tag_remove, result -> {
-            if (result) {
-                TagSaver.getInstance().removeTag(tag);
-                selectedTags.remove(tag);
-                binding.tagBox.removeView(chip);
-            }
-        }));
 
         chip.setText(tag);
         chip.setChecked(selectedTags.contains(tag));

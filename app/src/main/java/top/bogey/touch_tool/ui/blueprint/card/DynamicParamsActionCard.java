@@ -23,6 +23,7 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinRightView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinTopView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 
 @SuppressLint("ViewConstructor")
 public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCard {
@@ -39,7 +40,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
         adapter = new CustomActionCardRecycleViewAdapter(this);
         binding = CardDynamicParamsBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
-        CustomActionCardRecycleViewAdapter.HorizontalDragViewHolderHelper helper = new CustomActionCardRecycleViewAdapter.HorizontalDragViewHolderHelper(adapter);
+        DragViewHolderHelper helper = new DragViewHolderHelper(DragViewHolderHelper.VERTICAL, adapter);
         ItemTouchHelper horizontalTouchHelper = new ItemTouchHelper(helper);
 
         binding.outPinBox.setAdapter(adapter);

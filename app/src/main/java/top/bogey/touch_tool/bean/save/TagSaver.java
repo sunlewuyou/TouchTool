@@ -11,6 +11,7 @@ import java.util.Map;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.utils.GsonUtil;
+import top.bogey.touch_tool.utils.ThreadUtil;
 
 public class TagSaver {
     private static TagSaver instance;
@@ -48,12 +49,14 @@ public class TagSaver {
         mmkv.encode(TAG_DB, GsonUtil.toJson(tags));
     }
 
-    public void removeTag(String tag) {
+    public synchronized void removeTag(String tag) {
         tags.remove(tag);
         mmkv.encode(TAG_DB, GsonUtil.toJson(tags));
 
-        TaskSaver.getInstance().removeTasksTag(tag);
-        VariableSaver.getInstance().removeVariablesTag(tag);
+        ThreadUtil.execute(() -> {
+            TaskSaver.getInstance().removeTasksTag(tag);
+            VariableSaver.getInstance().removeVariablesTag(tag);
+        });
     }
 
     public List<String> getTags() {
@@ -65,12 +68,12 @@ public class TagSaver {
         mmkv.encode(TAG_DB, GsonUtil.toJson(tags));
     }
 
-    public void setTaskOrder(String taskId, List<String> order) {
-        taskOrder.put(taskId, order);
-        mmkv.encode(taskId, GsonUtil.toJson(order));
+    public void setTaskOrder(String tag, List<String> order) {
+        taskOrder.put(tag, order);
+        mmkv.encode(tag, GsonUtil.toJson(order));
     }
 
-    public List<String> getTaskOrder(String taskId) {
-        return taskOrder.get(taskId);
+    public List<String> getTaskOrder(String tag) {
+        return taskOrder.get(tag);
     }
 }

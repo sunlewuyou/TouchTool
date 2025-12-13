@@ -180,10 +180,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         new TabLayoutMediator(binding.tabBox, binding.tasksBox, (tab, position) -> tab.setText(adapter.tags.get(position))).attach();
         resetTags();
 
-        binding.tagButton.setOnClickListener(v -> {
-            TaskTagListView tagListView = new TaskTagListView(this);
-            tagListView.show(getParentFragmentManager(), null);
-        });
+        binding.tagButton.setOnClickListener(v -> new TagView(requireContext(), this).show());
 
         binding.selectAllButton.setOnClickListener(v -> selectAll());
 
@@ -233,10 +230,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
             hideBottomBar();
         });
 
-        binding.moveButton.setOnClickListener(v -> {
-            TaskTagListView tagListView = new TaskTagListView(this);
-            tagListView.show(getParentFragmentManager(), null);
-        });
+        binding.moveButton.setOnClickListener(v -> new TagView(requireContext(), this).show());
 
         binding.copyButton.setOnClickListener(v -> {
             selected.forEach(id -> {
@@ -284,6 +278,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         for (String history : SearchHistorySaver.getInstance().getSearchHistory()) {
             ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.historyBox, true);
             Chip chip = itemBinding.getRoot();
+            chip.setCloseIconVisible(true);
             chip.setOnCloseIconClickListener(v -> {
                 SearchHistorySaver.getInstance().removeSearchHistory(history);
                 binding.historyBox.removeView(chip);

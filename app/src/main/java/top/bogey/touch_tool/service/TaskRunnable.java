@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.service;
 
+import android.util.Log;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class TaskRunnable implements Runnable {
     private long pauseTime = -1;
 
     private final Stack<LogInfo> logStack = new Stack<>();
+    private final Stack<Integer> logStackIndex = new Stack<>();
     private final List<LogInfo> logList = new ArrayList<>();
 
     public TaskRunnable(Task task, StartAction startAction) {
@@ -95,11 +98,20 @@ public class TaskRunnable implements Runnable {
     public void pushStack(Task task, Action action) {
         taskStack.push(task);
         actionStack.push(action);
+        if (debug) {
+            logStackIndex.push(logStack.size());
+        }
     }
 
     public void popStack() {
         taskStack.pop();
         actionStack.pop();
+        if (debug) {
+            int index = logStackIndex.pop();
+            while (logStack.size() > index) {
+                addLog(logStack.pop(), 0);
+            }
+        }
         if (taskStack.isEmpty() || actionStack.isEmpty()) stop();
     }
 
@@ -159,6 +171,10 @@ public class TaskRunnable implements Runnable {
             }
             case 1 -> logStack.push(logInfo);
         }
+    }
+
+    private void popLogToLastTask() {
+
     }
 
     public void addDebugLog(Action action, int stackOption) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
@@ -45,11 +46,13 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        Action startAction = runnable.getAction();
         PinNumber<?> times = getPinValue(runnable, timesPin);
         PinBoolean allowRepeat = getPinValue(runnable, allowRepeatPin);
         List<Pin> dynamicPins = getDynamicPins();
         for (int i = 0; i < times.intValue(); i++) {
-            if (runnable.isInterrupt()) break;
+            if (runnable.isInterrupt()) return;
+            if (!startAction.equals(runnable.getAction())) return;
             if (dynamicPins.isEmpty()) break;
             int index = random.nextInt(dynamicPins.size());
             if (allowRepeat.getValue()) {

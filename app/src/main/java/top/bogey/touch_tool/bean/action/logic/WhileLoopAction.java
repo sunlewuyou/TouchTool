@@ -3,6 +3,7 @@ package top.bogey.touch_tool.bean.action.logic;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -30,9 +31,12 @@ public class WhileLoopAction extends ExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
             isBreak = false;
+            Action startAction = runnable.getAction();
             PinBoolean condition = getPinValue(runnable, conditionPin);
             while (condition.getValue()) {
-                if (isBreak || runnable.isInterrupt()) break;
+                if (runnable.isInterrupt()) return;
+                if (!startAction.equals(runnable.getAction())) return;
+                if (isBreak) break;
                 executeNext(runnable, outPin);
                 condition = getPinValue(runnable, conditionPin);
             }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
@@ -42,9 +43,11 @@ public class ListForeachAction extends ListExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
             isBreak = false;
+            Action startAction = runnable.getAction();
             PinList list = getPinValue(runnable, listPin);
             for (int i = 0; i < list.size(); i++) {
                 if (runnable.isInterrupt()) return;
+                if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 elementPin.setValue(returnValue(list.get(i)));
                 indexPin.getValue(PinInteger.class).setValue(i + 1);

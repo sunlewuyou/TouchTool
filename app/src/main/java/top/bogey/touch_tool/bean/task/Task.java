@@ -397,9 +397,11 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
             runnable.pushStack(copy, action);
             action.execute(runnable, pin);
 
-            Task task = runnable.getTask();
-            if (copy.equals(task)) {
+            // 如果没有正确的走结束执行，那么需要自动弹出一次
+            Action currStartAction = runnable.getAction();
+            if (currStartAction.equals(action)) {
                 runnable.popStack();
+                startAction.executeNext(runnable, startAction.getFirstOutExecutePin());
             }
 
             break;

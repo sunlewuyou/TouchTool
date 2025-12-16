@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
@@ -34,8 +35,10 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        Action startAction = runnable.getAction();
         for (Pin dynamicPin : getDynamicPins()) {
-            if (runnable.isInterrupt()) break;
+            if (runnable.isInterrupt()) return;
+            if (!startAction.equals(runnable.getAction())) return;
             executeNext(runnable, dynamicPin);
         }
         executeNext(runnable, completePin);

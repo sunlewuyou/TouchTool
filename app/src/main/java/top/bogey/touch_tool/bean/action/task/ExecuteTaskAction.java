@@ -130,6 +130,15 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
         return taskPin.getValue(PinTaskString.class).getValue();
     }
 
+    public Pin getFirstOutExecutePin() {
+        for (Pin pin : getPins()) {
+            if (pin.isOut() && pin.isSameClass(PinExecute.class)) {
+                return pin;
+            }
+        }
+        return null;
+    }
+
     @Override
     public List<Pin> getDynamicPins() {
         List<Pin> pins = new ArrayList<>();

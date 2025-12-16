@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
@@ -44,9 +45,11 @@ public class MapForeachAction extends MapExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
             isBreak = false;
+            Action startAction = runnable.getAction();
             PinMap map = getPinValue(runnable, mapPin);
             for (Map.Entry<PinObject, PinObject> entry : map.entrySet()) {
                 if (runnable.isInterrupt()) return;
+                if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 keyPin.setValue(returnValue(entry.getKey()));
                 valuePin.setValue(returnValue(entry.getValue()));

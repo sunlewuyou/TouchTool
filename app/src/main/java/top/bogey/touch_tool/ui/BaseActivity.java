@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,14 +28,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
-import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class BaseActivity extends AppCompatActivity {
     static {
@@ -96,36 +91,12 @@ public class BaseActivity extends AppCompatActivity {
                 resultCallback.onResult(RESULT_OK, intent);
             }
         });
-
-        MainAccessibilityService.enabled.observe(this, enabled -> {
-            if (MainApplication.getInstance().getService() == null) return;
-            if (enabled) {
-                View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
-                if (view != null) return;
-                new KeepAliveFloatView(this).show();
-            } else {
-                FloatWindow.dismiss(KeepAliveFloatView.class.getName());
-            }
-        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d("BaseActivity", "onStart: " + this.getClass().getName());
-
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        if (service != null && service.isEnabled()) {
-            View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
-            if (view != null) return;
-            new KeepAliveFloatView(this).show();
-        }
-    }
-
-    @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
-        FloatWindow.dismiss(KeepAliveFloatView.class.getName());
     }
 
     @Override

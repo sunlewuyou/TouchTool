@@ -45,6 +45,8 @@ public class CaptureService extends Service {
     private ImageReader imageReader;
     private VirtualDisplay virtualDisplay;
 
+    private int width = 0,  height = 0;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,6 +60,11 @@ public class CaptureService extends Service {
                         @Override
                         public void onStop() {
                             stopService();
+                        }
+
+                        @Override
+                        public void onCapturedContentResize(int width, int height) {
+                            adjustCaptureSize(width, height);
                         }
                     }, null);
                     setVirtualDisplay();
@@ -97,6 +104,7 @@ public class CaptureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
         if (virtualDisplay != null) virtualDisplay.release();
         if (imageReader != null) imageReader.close();
 
@@ -157,12 +165,28 @@ public class CaptureService extends Service {
         virtualDisplay = projection.createVirtualDisplay("CaptureService", metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, imageReader.getSurface(), null, null);
     }
 
+    private void adjustCaptureSize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+        if (virtualDisplay == null || imageReader == null) return;
+        if (width == this.width && height == this.height) return;
+        this.width = width;
+        this.height = height;
+        WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getRealMetrics(metrics);
+        int densityDpi = metrics.densityDpi;
+        imageReader.close();
+        imageReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2);
+        virtualDisplay.resize(width, height, densityDpi);
+        virtualDisplay.setSurface(imageReader.getSurface());
+    }
 
     public class CaptureBinder extends Binder {
 
         public synchronized Bitmap getScreenShot() {
             Bitmap bitmap = null;
             try (Image image = imageReader.acquireLatestImage()) {
+                if (image == null) return null;
                 bitmap = rgba8888ImageToBitmap(image);
             } catch (Exception | Error e) {
                 e.printStackTrace();

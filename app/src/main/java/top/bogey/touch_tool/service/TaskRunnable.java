@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.service;
 
-import android.util.Log;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -171,10 +169,6 @@ public class TaskRunnable implements Runnable {
             }
             case 1 -> logStack.push(logInfo);
         }
-    }
-
-    private void popLogToLastTask() {
-
     }
 
     public void addDebugLog(Action action, int stackOption) {

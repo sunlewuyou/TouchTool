@@ -128,6 +128,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private boolean editable = true;
 
+    private boolean loaded = false;
+
     public CardLayoutView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -196,6 +198,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     public void setTask(Task task, HistoryManager history) {
         this.task = task;
         this.history = history;
+        loaded = false;
         offsetX = 0;
         offsetY = 0;
         scale = DEFAULT_SCALE;
@@ -220,6 +223,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 updateCardsPos(cardMap);
                 checkCards();
                 invalidate();
+                loaded = true;
                 return;
             }
             Action action = actions.get(i);
@@ -1059,6 +1063,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
     }
 
     public List<Action> getSelectedActions() {

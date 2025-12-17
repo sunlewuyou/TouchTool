@@ -249,6 +249,7 @@ public class BlueprintView extends Fragment {
         }).show());
 
         binding.sortButton.setOnClickListener(v -> {
+            if (!binding.cardLayout.isLoaded()) return;
             Task currTask = taskStack.peek();
             List<Action> startActions = currTask.getActions(StartAction.class);
             List<Action> actions = currTask.getActions(CustomStartAction.class);

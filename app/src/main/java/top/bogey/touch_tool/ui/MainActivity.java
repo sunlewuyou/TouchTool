@@ -16,9 +16,12 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -42,11 +45,29 @@ public class MainActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         SettingSaver.getInstance().init(this);
+
+        MainAccessibilityService.enabled.observe(this, enabled -> {
+            if (MainApplication.getInstance().getService() == null) return;
+            if (enabled) {
+                View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
+                if (view != null) return;
+                new KeepAliveFloatView(this).show();
+            } else {
+                FloatWindow.dismiss(KeepAliveFloatView.class.getName());
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null && service.isEnabled()) {
+            View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
+            if (view != null) return;
+            new KeepAliveFloatView(this).show();
+        }
 
         NavController controller = Navigation.findNavController(this, R.id.conView);
         NavigationUI.setupWithNavController(binding.menuView, controller);
@@ -86,6 +107,12 @@ public class MainActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+    }
+
+    @Override
+    protected void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
+        FloatWindow.dismiss(KeepAliveFloatView.class.getName());
     }
 
     public void showBottomNavigation() {

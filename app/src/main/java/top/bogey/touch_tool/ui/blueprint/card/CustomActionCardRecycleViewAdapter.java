@@ -82,12 +82,12 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
     public void swap(int from, int to) {
         Pin fromPin = pinViews.get(from).getPin();
         Pin toPin = pinViews.get(to).getPin();
-        Collections.swap(pinViews, from, to);
+        pinViews.add(to, pinViews.remove(from));
 
         List<Pin> pins = card.getAction().getPins();
         int i = pins.indexOf(fromPin);
         int j = pins.indexOf(toPin);
-        Collections.swap(pins, i, j);
+        pins.add(j, pins.remove(i));
 
         notifyItemMoved(from, to);
     }

@@ -370,7 +370,7 @@ public class SettingSaver {
             DynamicColorsOptions.Builder builder = new DynamicColorsOptions.Builder();
             int colorValue = getDynamicColorValue();
             if (colorValue != Color.BLACK) builder.setContentBasedSource(colorValue);
-            builder.setOnAppliedCallback(activity -> FloatWindow.dismiss(KeepAliveFloatView.class.getName()));
+//            builder.setOnAppliedCallback(activity -> FloatWindow.dismiss(KeepAliveFloatView.class.getName()));
             return builder.build();
         }
         return null;

@@ -66,7 +66,7 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.ViewHold
 
     @Override
     public void swap(int from, int to) {
-        Collections.swap(tags, from, to);
+        tags.add(to, tags.remove(from));
         notifyItemMoved(from, to);
         TagSaver.getInstance().setTags(tags);
         taskView.resetTags();

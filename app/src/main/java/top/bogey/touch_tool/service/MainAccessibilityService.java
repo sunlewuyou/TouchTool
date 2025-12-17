@@ -489,7 +489,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     // 不能递归调用，会锁死
-    public synchronized Bitmap getScreenShotByAccessibility() {
+    public Bitmap getScreenShotByAccessibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             CompletableFuture<Bitmap> future = new CompletableFuture<>();
             takeScreenshot(0, ThreadUtil.getExecutorService(), new TakeScreenshotCallback() {

@@ -372,7 +372,7 @@ public class TaskInfoSummary {
 
     public void enterActivity(String packageName, String activityName) {
         if (isActivityClass(packageName, activityName)) {
-            if (packageName.equals(MainApplication.getInstance().getPackageName())) {
+            if (packageName.equals(MainApplication.getInstance().getPackageName()) && activityName.equals(MainActivity.class.getName())) {
                 if (setPackageActivity(packageName, activityName)) {
                     tryShowManualPlayView(false);
                 }

@@ -95,7 +95,11 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             runnableList.add(taskRunnable);
         }
         try {
-            latch.await(timeout.intValue(), TimeUnit.MILLISECONDS);
+            if (timeout.intValue() <= 0) {
+                latch.await();
+            } else {
+                latch.await(timeout.intValue(), TimeUnit.MILLISECONDS);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             resultPin.getValue(PinBoolean.class).setValue(false);

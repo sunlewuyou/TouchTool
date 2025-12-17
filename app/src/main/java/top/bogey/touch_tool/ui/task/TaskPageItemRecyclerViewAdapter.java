@@ -115,7 +115,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
     @Override
     public void swap(int from, int to) {
-        Collections.swap(tasks, from, to);
+        tasks.add(to, tasks.remove(from));
         List<String> order = new ArrayList<>();
         for (Task task : tasks) {
             order.add(task.getId());

@@ -130,8 +130,12 @@ public class TaskSaver {
         }
         List<String> list = new ArrayList<>();
         for (String tag : TagSaver.getInstance().getTags()) {
-            if (tags.contains(tag)) list.add(tag);
+            if (tags.contains(tag)) {
+                list.add(tag);
+                tags.remove(tag);
+            }
         }
+        list.addAll(tags);
         if (emptyTag || saves.isEmpty()) list.add(EMPTY_TAG);
         return list;
     }

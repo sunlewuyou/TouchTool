@@ -72,7 +72,7 @@
             android:name=".ui.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -101,14 +101,16 @@
             android:name=".ui.PermissionActivity"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
+            android:taskAffinity="ui.PermissionActivity"
             android:theme="@style/Theme.TouchTool.Transparent" />
 
         <activity
             android:name=".ui.InstantActivity"
             android:excludeFromRecents="true"
             android:exported="true"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
+            android:taskAffinity="ui.InstantActivity"
             android:theme="@style/Theme.TouchTool.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

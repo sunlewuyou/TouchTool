@@ -43,9 +43,9 @@ public class SendToastAction extends ExecuteAction {
         PinSingleSelect length = getPinValue(runnable, lengthPin);
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
-        if (keepView == null) return;
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(keepView.getThemeContext(), content.toString(), length.getIndex()).show());
-
+        if (keepView != null) {
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(keepView.getThemeContext(), content.toString(), length.getIndex()).show());
+        }
         executeNext(runnable, outPin);
     }
 

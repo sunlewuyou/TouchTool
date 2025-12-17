@@ -24,7 +24,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class InstantActivity extends BaseActivity {
+public class InstantActivity extends FloatViewActivity {
     public static final String INTENT_KEY_DO_ACTION = "INTENT_KEY_DO_ACTION";
 
     public static final String TASK_ID = "TASK_ID";
@@ -32,19 +32,12 @@ public class InstantActivity extends BaseActivity {
     public static final String PIN_ID = "PIN_ID";
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
         Intent intent = getIntent();
         handleIntent(intent);
-        moveTaskToBack(true);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-        moveTaskToBack(true);
+        finish();
     }
 
     private void handleIntent(Intent intent) {

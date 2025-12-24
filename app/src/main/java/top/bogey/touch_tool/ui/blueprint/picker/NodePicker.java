@@ -249,8 +249,8 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        float x = event.getRawX();
+        float y = event.getRawY();
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             int type = SettingSaver.getInstance().getPickNodeType();

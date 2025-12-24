@@ -530,6 +530,7 @@
 
     <string name="get_node_children_action">获取子控件</string>
     <string name="get_node_children_action_desc">获取控件所有子控件</string>
+    <string name="get_node_children_action_get_all">包括子孙</string>
 
     <string name="get_node_parent_action">获取父控件</string>
     <string name="get_node_parent_action_desc">获取控件的父控件</string>

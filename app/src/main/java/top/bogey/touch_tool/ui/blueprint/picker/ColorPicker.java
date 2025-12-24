@@ -172,7 +172,7 @@ public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {
             binding.colorBox.setY(currentY - px);
         }
         Bitmap screenShot = screenInfo.getScreenShot();
-        if (screenShot != null) {
+        if (screenShot != null && screenShot.getWidth() > currentX && screenShot.getHeight() > currentY) {
             int pixel = screenShot.getPixel((int) currentX, (int) currentY);
             binding.colorPreview.setBackgroundColor(pixel);
             binding.currentColor.setBackgroundColor(pixel);

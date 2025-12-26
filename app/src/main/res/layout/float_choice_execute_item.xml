@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?attr/materialCardViewFilledStyle"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="?attr/defaultOffset"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge">
@@ -29,7 +29,9 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="start|center_vertical"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+            android:maxLines="3"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            app:lineHeight="18sp" />
 
     </LinearLayout>
 

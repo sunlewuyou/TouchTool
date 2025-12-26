@@ -54,7 +54,7 @@ public class SimpleNodeInfo {
     }
 
     public boolean matchNodeClass(SimpleNodeInfo nodeInfo) {
-        return clazz.contentEquals(nodeInfo.clazz);
+        return Objects.equals(clazz, nodeInfo.clazz);
     }
 
     public boolean matchNodeId(SimpleNodeInfo nodeInfo) {

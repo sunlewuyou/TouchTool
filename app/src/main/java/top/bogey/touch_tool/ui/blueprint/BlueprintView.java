@@ -195,9 +195,8 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskCapture) {
                 Bitmap bitmap = binding.cardLayout.takeTaskCapture();
-                Bitmap safeBitmap = DisplayUtil.safeScaleBitmap(bitmap, 2048, 2048);
                 ShapeableImageView imageView = new ShapeableImageView(requireContext());
-                imageView.setImageBitmap(safeBitmap);
+                imageView.setImageBitmap(bitmap);
 
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.task_capture)
@@ -276,6 +275,7 @@ public class BlueprintView extends Fragment {
 
             for (Action copyAction : copyActions) {
                 ActionCard card = binding.cardLayout.addCard(copyAction);
+                if (card == null) continue;
                 if (first) {
                     first = false;
                     int x = copyAction.getPos().x;

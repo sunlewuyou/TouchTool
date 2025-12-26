@@ -391,7 +391,7 @@ public abstract class Action extends Identity implements PinListener {
         public Action deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObject = json.getAsJsonObject();
             ActionType type = GsonUtil.getAsObject(jsonObject, "type", ActionType.class, null);
-            assert type != null;
+            if (type == null) return null;
             ActionInfo info = ActionInfo.getActionInfo(type);
             if (info == null) return null;
             try {

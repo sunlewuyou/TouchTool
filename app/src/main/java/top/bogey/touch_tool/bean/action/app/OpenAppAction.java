@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action.system;
+package top.bogey.touch_tool.bean.action.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class OpenAppAction extends ExecuteAction {
     private final static List<Integer> FLAGS = Arrays.asList(
@@ -165,7 +166,7 @@ public class OpenAppAction extends ExecuteAction {
             }
             intent.putExtras(params);
 
-            context.startActivity(intent, bundle);
+            AppUtil.startActivity(context, intent, bundle);
         }
 
         executeNext(runnable, outPin);

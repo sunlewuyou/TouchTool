@@ -1,10 +1,12 @@
 package top.bogey.touch_tool.utils;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
@@ -13,12 +15,15 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -36,6 +42,8 @@ import androidx.core.content.FileProvider;
 
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,7 +56,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,6 +111,12 @@ public class AppUtil {
                 callback.onResult(binding.titleEdit.getText().toString());
             }
         }).setNegativeButton(R.string.cancel, null).show();
+
+        binding.getRoot().postDelayed(() -> {
+            binding.titleEdit.requestFocus();
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
+        }, 100);
     }
 
     public static void gotoAppDetailView(Context context) {
@@ -151,53 +164,42 @@ public class AppUtil {
         wakeLock.release();
     }
 
-    public static void gotoApp(Context context, String packageName, Map<String, String> params) {
-        try {
-            Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            if (intent != null) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                if (params != null) {
-                    for (Map.Entry<String, String> entry : params.entrySet()) {
-                        intent.putExtra(entry.getKey(), entry.getValue());
-                    }
-                }
-
-                context.startActivity(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void gotoActivity(Context context, String packageName, String activityName, Map<String, String> params) {
-        try {
-            Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            if (intent != null) {
-                intent.setComponent(new ComponentName(packageName, activityName));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                if (params != null) {
-                    for (Map.Entry<String, String> entry : params.entrySet()) {
-                        intent.putExtra(entry.getKey(), entry.getValue());
-                    }
-                }
-
-                context.startActivity(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void gotoScheme(Context context, String scheme) {
         try {
             Intent intent = Intent.parseUri(scheme, 0);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            startActivity(context, intent, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void startActivity(Context context, Intent intent, Bundle options) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && context.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+            ComponentName component = intent.getComponent();
+            if (component != null && !component.getClassName().isEmpty()) {
+                ActivityInfo activityInfo = TaskInfoSummary.getInstance().getActivityInfo(component.getPackageName(), component.getClassName());
+                if (!activityInfo.exported) {
+
+                    String currAssistant = Settings.Secure.getString(context.getContentResolver(), "assistant");
+                    String assistant = component.flattenToString();
+
+                    try {
+                        Settings.Secure.putString(context.getContentResolver(), "assistant", assistant);
+                        SearchManager manager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+                        if (manager != null) {
+                            HiddenApiBypass.invoke(SearchManager.class, manager, "launchAssist", intent.getExtras());
+                        }
+                        Thread.sleep(100);
+                        Settings.Secure.putString(context.getContentResolver(), "assistant", currAssistant);
+                    } catch (Exception ignored) {
+                        Settings.Secure.putString(context.getContentResolver(), "assistant", currAssistant);
+                    }
+                    return;
+                }
+            }
+        }
+        context.startActivity(intent, options);
     }
 
     public static void gotoUrl(Context context, String url) {

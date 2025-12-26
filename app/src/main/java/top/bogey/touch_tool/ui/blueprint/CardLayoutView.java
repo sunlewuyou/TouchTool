@@ -806,6 +806,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         area.right += gridSize * (CORNER_OFFSET_SCALE + 1);
         area.bottom += gridSize * (CORNER_OFFSET_SCALE + 1);
 
+        scale = Math.min(2048 / area.width(), 2048 / area.height());
+        updateCardsPos();
+        area = calculateCardsArea(cards.values());
+        area.left -= gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.top -= gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.right += gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.bottom += gridSize * (CORNER_OFFSET_SCALE + 1);
+
         // 设置偏移
         offsetX = -area.left;
         offsetY = -area.top;

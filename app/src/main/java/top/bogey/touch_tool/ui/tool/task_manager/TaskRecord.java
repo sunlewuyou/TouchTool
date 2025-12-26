@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.tool.task_manager;
 
+import android.content.Context;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public record TaskRecord(Set<Task> tasks, Set<Variable> variables) {
 
@@ -60,5 +63,13 @@ public record TaskRecord(Set<Task> tasks, Set<Variable> variables) {
             if (variable.getId().equals(id)) return variable;
         }
         return null;
+    }
+
+    public String getDefaultName(Context context) {
+        if (tasks.size() == 1) {
+            return tasks.iterator().next().getTitle();
+        } else {
+            return "TT_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true);
+        }
     }
 }

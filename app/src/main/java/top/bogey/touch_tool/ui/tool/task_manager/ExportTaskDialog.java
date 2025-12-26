@@ -93,15 +93,15 @@ public class ExportTaskDialog extends FrameLayout {
 
     public void export() {
         Context context = getContext();
-        AppUtil.showEditDialog(context, R.string.file_name, "TT_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true), fileName -> {
-            TaskRecord taskRecord = adapter.getTaskRecord();
+        TaskRecord taskRecord = adapter.getTaskRecord();
+        AppUtil.showEditDialog(context, R.string.file_name, taskRecord.getDefaultName(context), filename -> {
             String json = GsonUtil.toJson(taskRecord);
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setType("text/*");
 
-            File file = AppUtil.writeFile(context, AppUtil.TASK_DIR_NAME, fileName + ".tt", json.getBytes());
+            File file = AppUtil.writeFile(context, AppUtil.TASK_DIR_NAME, filename + ".tt", json.getBytes());
             if (file != null) {
                 Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -112,11 +112,10 @@ public class ExportTaskDialog extends FrameLayout {
     }
 
     public void save() {
-        Context context = getContext();
         TaskRecord taskRecord = adapter.getTaskRecord();
         String json = GsonUtil.toJson(taskRecord);
 
         MainActivity activity = MainApplication.getInstance().getActivity();
-        AppUtil.exportFile(activity, "TT_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".tt", json.getBytes());
+        AppUtil.exportFile(activity, taskRecord.getDefaultName(getContext()) + ".tt", json.getBytes());
     }
 }

@@ -45,11 +45,15 @@ public enum ActionType {
     MARK_AREA,
     SHOW_TEXT,
 
-    // 系统动作
+    // 应用相关
     OPEN_APP,
-    OPEN_ACTIVITY,
     OPEN_URI_SCHEME,
     OPEN_SHORTCUT,
+    GET_CURRENT_APPLICATION,
+    CHECK_IN_APPLICATION,
+    STRING_TO_APP,
+
+    // 系统动作
     SHELL,
     SHARE_TO,
 
@@ -72,9 +76,6 @@ public enum ActionType {
 
     SWITCH_CAPTURE,
     CHECK_CAPTURE_READY,
-
-    GET_CURRENT_APPLICATION,
-    CHECK_IN_APPLICATION,
 
     GET_BATTERY_STATUS,
 

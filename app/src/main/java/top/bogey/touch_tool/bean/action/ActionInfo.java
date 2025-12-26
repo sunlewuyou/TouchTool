@@ -8,6 +8,12 @@ import java.lang.reflect.Constructor;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.app.CheckInAppAction;
+import top.bogey.touch_tool.bean.action.app.GetCurrentAppAction;
+import top.bogey.touch_tool.bean.action.app.OpenAppAction;
+import top.bogey.touch_tool.bean.action.app.OpenShortcutAction;
+import top.bogey.touch_tool.bean.action.app.OpenUriSchemeAction;
+import top.bogey.touch_tool.bean.action.app.StringToAppAction;
 import top.bogey.touch_tool.bean.action.area.AreaFromIntegerAction;
 import top.bogey.touch_tool.bean.action.area.AreaToIntegerAction;
 import top.bogey.touch_tool.bean.action.area.CheckAreaContainPosAction;
@@ -137,19 +143,13 @@ import top.bogey.touch_tool.bean.action.string.StringSplitAction;
 import top.bogey.touch_tool.bean.action.string.StringSubStringAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
-import top.bogey.touch_tool.bean.action.system.CheckInAppAction;
 import top.bogey.touch_tool.bean.action.system.ExecuteShellAction;
 import top.bogey.touch_tool.bean.action.system.GetBatteryStatusAction;
-import top.bogey.touch_tool.bean.action.system.GetCurrentAppAction;
 import top.bogey.touch_tool.bean.action.system.GetDateAction;
 import top.bogey.touch_tool.bean.action.system.GetNetworkStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetScreenStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetTimeAction;
 import top.bogey.touch_tool.bean.action.system.GetVolumeAction;
-import top.bogey.touch_tool.bean.action.system.OpenActivityAction;
-import top.bogey.touch_tool.bean.action.system.OpenAppAction;
-import top.bogey.touch_tool.bean.action.system.OpenShortcutAction;
-import top.bogey.touch_tool.bean.action.system.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
@@ -224,11 +224,15 @@ public class ActionInfo {
     private final static ActionInfo SHOW_TEXT_INFO = new ActionInfo(ActionType.SHOW_TEXT, ShowTextAction.class, R.drawable.icon_edit, R.string.show_text_action, R.string.show_text_action_desc, 0, ShowTextActionCard.class);
 
 
-    // 系统动作
+    // 应用相关
     private final static ActionInfo OPEN_APP_INFO = new ActionInfo(ActionType.OPEN_APP, OpenAppAction.class, R.drawable.icon_apps, R.string.open_app_action, R.string.open_app_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo OPEN_ACTIVITY_INFO = new ActionInfo(ActionType.OPEN_ACTIVITY, OpenActivityAction.class, R.drawable.icon_apps, R.string.open_activity_action, R.string.open_activity_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_URI_SCHEME_INFO = new ActionInfo(ActionType.OPEN_URI_SCHEME, OpenUriSchemeAction.class, R.drawable.icon_link, R.string.open_uri_scheme_action, R.string.open_uri_scheme_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_SHORTCUT_INFO = new ActionInfo(ActionType.OPEN_SHORTCUT, OpenShortcutAction.class, R.drawable.icon_apps, R.string.open_shortcut_action, R.string.open_shortcut_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_CURRENT_APPLICATION_INFO = new ActionInfo(ActionType.GET_CURRENT_APPLICATION, GetCurrentAppAction.class, R.drawable.icon_apps, R.string.get_current_app_action, R.string.get_current_app_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo CHECK_IN_APPLICATION_INFO = new ActionInfo(ActionType.CHECK_IN_APPLICATION, CheckInAppAction.class, R.drawable.icon_apps, R.string.check_in_app_action, R.string.check_in_app_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_TO_APP_INFO = new ActionInfo(ActionType.STRING_TO_APP, StringToAppAction.class, R.drawable.icon_apps, R.string.string_to_app_action, R.string.string_to_app_action_desc, 0, NormalActionCard.class);
+
+    // 系统动作
     private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHARE_TO_INFO = new ActionInfo(ActionType.SHARE_TO, ShareToAction.class, R.drawable.icon_share, R.string.share_to_action, R.string.share_to_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SYSTEM_KEY_INFO = new ActionInfo(ActionType.SYSTEM_KEY, SystemKeyAction.class, R.drawable.icon_keyboard, R.string.system_key_action, R.string.system_key_action_desc, 0, NormalActionCard.class);
@@ -249,8 +253,6 @@ public class ActionInfo {
     private final static ActionInfo SWITCH_CAPTURE_INFO = new ActionInfo(ActionType.SWITCH_CAPTURE, SwitchCaptureAction.class, R.drawable.icon_screen_record, R.string.capture_switch_action, R.string.capture_switch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_CAPTURE_READY_INFO = new ActionInfo(ActionType.CHECK_CAPTURE_READY, CheckCaptureReadyAction.class, R.drawable.icon_screen_record, R.string.check_capture_ready_action, R.string.check_capture_ready_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo GET_CURRENT_APPLICATION_INFO = new ActionInfo(ActionType.GET_CURRENT_APPLICATION, GetCurrentAppAction.class, R.drawable.icon_apps, R.string.get_current_app_action, R.string.get_current_app_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo CHECK_IN_APPLICATION_INFO = new ActionInfo(ActionType.CHECK_IN_APPLICATION, CheckInAppAction.class, R.drawable.icon_apps, R.string.check_in_app_action, R.string.check_in_app_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo GET_BATTERY_STATUS_INFO = new ActionInfo(ActionType.GET_BATTERY_STATUS, GetBatteryStatusAction.class, R.drawable.icon_battery_android_full, R.string.get_battery_status_action, R.string.get_battery_status_action_desc, 0, NormalActionCard.class);
 
@@ -433,9 +435,13 @@ public class ActionInfo {
 
 
             case OPEN_APP -> OPEN_APP_INFO;
-            case OPEN_ACTIVITY -> OPEN_ACTIVITY_INFO;
             case OPEN_URI_SCHEME -> OPEN_URI_SCHEME_INFO;
             case OPEN_SHORTCUT -> OPEN_SHORTCUT_INFO;
+            case GET_CURRENT_APPLICATION -> GET_CURRENT_APPLICATION_INFO;
+            case CHECK_IN_APPLICATION -> CHECK_IN_APPLICATION_INFO;
+            case STRING_TO_APP -> STRING_TO_APP_INFO;
+
+
             case SHELL -> SHELL_INFO;
             case SHARE_TO -> SHARE_TO_INFO;
             case SYSTEM_KEY -> SYSTEM_KEY_INFO;
@@ -456,8 +462,6 @@ public class ActionInfo {
             case SWITCH_CAPTURE -> SWITCH_CAPTURE_INFO;
             case CHECK_CAPTURE_READY -> CHECK_CAPTURE_READY_INFO;
 
-            case GET_CURRENT_APPLICATION -> GET_CURRENT_APPLICATION_INFO;
-            case CHECK_IN_APPLICATION -> CHECK_IN_APPLICATION_INFO;
 
             case GET_BATTERY_STATUS -> GET_BATTERY_STATUS_INFO;
 

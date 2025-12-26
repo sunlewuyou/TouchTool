@@ -62,11 +62,16 @@ public class ActionMap {
                     ActionType.TOUCH_COLOR
             ));
 
-            case SYSTEM -> list.addAll(Arrays.asList(
+            case APP -> list.addAll(Arrays.asList(
                     ActionType.OPEN_APP,
-                    ActionType.OPEN_ACTIVITY,
                     ActionType.OPEN_URI_SCHEME,
                     ActionType.OPEN_SHORTCUT,
+                    ActionType.GET_CURRENT_APPLICATION,
+                    ActionType.CHECK_IN_APPLICATION,
+                    ActionType.STRING_TO_APP
+            ));
+
+            case SYSTEM -> list.addAll(Arrays.asList(
                     ActionType.SHELL,
                     ActionType.SHARE_TO,
                     ActionType.SYSTEM_KEY,
@@ -86,9 +91,6 @@ public class ActionMap {
 
                     ActionType.SWITCH_CAPTURE,
                     ActionType.CHECK_CAPTURE_READY,
-
-                    ActionType.GET_CURRENT_APPLICATION,
-                    ActionType.CHECK_IN_APPLICATION,
 
                     ActionType.GET_BATTERY_STATUS,
 
@@ -235,7 +237,7 @@ public class ActionMap {
     }
 
     public enum ActionGroupType {
-        START, LOGIC, NORMAL, CLICK, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST, MAP;
+        START, LOGIC, NORMAL, CLICK, APP, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST, MAP;
 
         public String getName() {
             String[] strings = MainApplication.getInstance().getResources().getStringArray(R.array.action_group);

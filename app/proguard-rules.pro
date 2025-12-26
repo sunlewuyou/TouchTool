@@ -23,12 +23,12 @@
 -assumenosideeffects class android.util.Log{
     public static int d(...);
 }
-
--keep class android.graphics.Point{*;}
--keep class android.graphics.Rect{*;}
-
--keep class top.bogey.touch_tool.utils.MatchResult{*;}
--keep class top.bogey.touch_tool.bean.**{*;}
--keep class top.bogey.touch_tool.ui.blueprint.**{*;}
+#
+#-keep class android.graphics.Point{*;}
+#-keep class android.graphics.Rect{*;}
+#
+#-keep class top.bogey.touch_tool.utils.MatchResult{*;}
+#-keep class top.bogey.touch_tool.bean.**{*;}
+#-keep class top.bogey.touch_tool.ui.blueprint.**{*;}
 
 -keep enum top.bogey.touch_tool.** {*;}

@@ -40,8 +40,10 @@ public class PinApplication extends PinObject {
     public PinApplication(String packageName, String activityClass) {
         this();
         this.packageName = packageName;
-        this.activityClasses = new ArrayList<>();
-        this.activityClasses.add(activityClass);
+        if (activityClass != null && !activityClass.isEmpty()) {
+            this.activityClasses = new ArrayList<>();
+            this.activityClasses.add(activityClass);
+        }
     }
 
     public PinApplication(JsonObject jsonObject) {

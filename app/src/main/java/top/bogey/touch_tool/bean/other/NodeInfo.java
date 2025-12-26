@@ -43,7 +43,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         CharSequence nodeDesc = node.getContentDescription();
         if (nodeDesc != null) desc = nodeDesc.toString();
 
-        usable = node.isEnabled() && (node.isCheckable() || node.isClickable() || node.isLongClickable() || node.isEditable());
+        usable = node.isEnabled() && (node.isClickable() || node.isLongClickable() || node.isEditable() || node.isFocusable());
         visible = node.isVisibleToUser();
         area = new Rect();
         node.getBoundsInScreen(area);

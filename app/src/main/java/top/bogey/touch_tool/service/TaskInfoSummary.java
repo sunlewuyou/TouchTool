@@ -99,6 +99,15 @@ public class TaskInfoSummary {
         return apps.get(packageName);
     }
 
+    public ActivityInfo getActivityInfo(String packageName, String activityName) {
+        PackageInfo packageInfo = getAppInfo(packageName);
+        if (packageInfo == null || packageInfo.activities == null) return null;
+        for (ActivityInfo activityInfo : packageInfo.activities) {
+            if (activityInfo.name.equals(activityName)) return activityInfo;
+        }
+        return null;
+    }
+
     public String getAppName(String packageName) {
         PackageInfo packageInfo = getAppInfo(packageName);
         if (packageInfo == null || packageInfo.applicationInfo == null) return null;

@@ -27,8 +27,10 @@ import android.os.RemoteException;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -92,10 +94,19 @@ public class MainAccessibilityService extends AccessibilityService {
         String packageName = event.getPackageName().toString();
         String className = event.getClassName().toString();
         if (packageName.isEmpty() || className.isEmpty()) return;
+        Log.d("TAG", "onAccessibilityEvent: " + event);
+        Log.d("TAG", "onAccessibilityEvent: " + packageName + "/" + className);
 
         int eventType = event.getEventType();
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            taskInfoSummary.enterActivity(packageName, className);
+            AccessibilityNodeInfo root = getRootInActiveWindow();
+            if (root != null && root.getPackageName() != null) {
+                if (Objects.equals(packageName, root.getPackageName().toString())) {
+                    taskInfoSummary.enterActivity(packageName, className);
+                }
+            } else {
+                taskInfoSummary.enterActivity(packageName, className);
+            }
         } else if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
             Map<String, String> content = new HashMap<>();
             List<CharSequence> textList = event.getText();

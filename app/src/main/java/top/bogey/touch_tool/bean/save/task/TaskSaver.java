@@ -109,7 +109,7 @@ public class TaskSaver {
         for (Map.Entry<String, TaskSave> entry : saves.entrySet()) {
             TaskSave v = entry.getValue();
             Task task = v.getTask();
-            if (AppUtil.isStringContains(task.getFullDescription(), title)) {
+            if (AppUtil.isStringContainsWithPinyin(task.getFullDescription(), title)) {
                 tasks.add(task);
             }
         }

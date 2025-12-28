@@ -42,6 +42,7 @@ public enum ActionType {
     CLOSE_ALL_STICK,
 
     INPUT_PARAM,
+    INPUT_CONFIG,
     MARK_AREA,
     SHOW_TEXT,
 

@@ -48,7 +48,7 @@ public class ActionMap {
                     ActionType.CLOSE_STICK,
                     ActionType.CLOSE_ALL_STICK,
 
-                    ActionType.INPUT_PARAM,
+                    ActionType.INPUT_CONFIG,
                     ActionType.STOP_TASK,
                     ActionType.MARK_AREA,
                     ActionType.SHOW_TEXT

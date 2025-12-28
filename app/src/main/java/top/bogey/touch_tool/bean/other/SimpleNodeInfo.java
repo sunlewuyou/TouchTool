@@ -60,4 +60,16 @@ public class SimpleNodeInfo {
     public boolean matchNodeId(SimpleNodeInfo nodeInfo) {
         return Objects.equals(id, nodeInfo.id);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleNodeInfo info = (SimpleNodeInfo) o;
+        return index == info.index && Objects.equals(clazz, info.clazz) && Objects.equals(id, info.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clazz, id, index);
+    }
 }

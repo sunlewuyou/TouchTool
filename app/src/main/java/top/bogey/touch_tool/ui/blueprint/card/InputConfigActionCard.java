@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
+import java.util.UUID;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.databinding.CardDynamicParamsBinding;
+import top.bogey.touch_tool.databinding.CardInputConfigBinding;
 import top.bogey.touch_tool.ui.blueprint.pin.PinBottomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinLeftView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightView;
@@ -26,25 +27,25 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 
 @SuppressLint("ViewConstructor")
-public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCard {
-    private CardDynamicParamsBinding binding;
-    private CustomActionCardAdapter adapter;
+public class InputConfigActionCard extends ActionCard implements IDynamicPinCard {
+    private CardInputConfigBinding binding;
+    private InputConfigActionAdapter adapter;
 
-    public DynamicParamsActionCard(Context context, Task task, Action action) {
+    public InputConfigActionCard(Context context, Task task, Action action) {
         super(context, task, action);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void init() {
-        adapter = new CustomActionCardAdapter(this);
-        binding = CardDynamicParamsBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        adapter = new InputConfigActionAdapter(this);
+        binding = CardInputConfigBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
         DragViewHolderHelper helper = new DragViewHolderHelper(DragViewHolderHelper.VERTICAL, adapter);
-        ItemTouchHelper horizontalTouchHelper = new ItemTouchHelper(helper);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(helper);
 
-        binding.outPinBox.setAdapter(adapter);
-        horizontalTouchHelper.attachToRecyclerView(binding.outPinBox);
+        binding.inPinBox.setAdapter(adapter);
+        touchHelper.attachToRecyclerView(binding.inPinBox);
 
         initCardInfo(binding.icon, binding.title, binding.des);
         initEditDesc(binding.editButton, binding.des);
@@ -52,7 +53,19 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
         initLock(binding.lockButton);
         initPosView(binding.position);
 
-        binding.addButton.setOnClickListener(v -> action.addPin(new Pin(new PinString(), 0, true, true)));
+        binding.addButton.setOnClickListener(v -> {
+            Pin inPin = new Pin(new PinString(), 0, false, true);
+            Pin outPin = new Pin(new PinString(), 0, true, false);
+            String uid = UUID.randomUUID().toString();
+            inPin.setUid(uid);
+            outPin.setUid(uid);
+            action.addPin(inPin);
+            action.addPin(outPin);
+        });
+    }
+
+    public void swap(int from, int to) {
+
     }
 
     @Override
@@ -73,7 +86,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
     @Override
     public void addPinView(Pin pin, int offset) {
         PinView pinView;
-        if (pin.isDynamic() && !pin.isVertical()) {
+        if (pin.isDynamic()) {
             pinView = adapter.addPin(pin);
         } else {
             if (pin.isOut()) {
@@ -100,7 +113,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
 
     @Override
     public void removePinView(Pin pin) {
-        if (pin.isDynamic() && !pin.isVertical()) {
+        if (pin.isDynamic()) {
             adapter.removePin(pin);
         } else {
             super.removePinView(pin);
@@ -111,7 +124,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
     public boolean isEmptyPosition(float x, float y) {
         float scale = getScaleX();
 
-        List<MaterialButton> buttons = List.of(binding.lockButton, binding.addButton, binding.removeButton, binding.editButton);
+        List<MaterialButton> buttons = List.of(binding.expandButton, binding.addButton, binding.lockButton, binding.copyButton, binding.removeButton, binding.editButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
             float px = pointF.x * scale;
@@ -125,7 +138,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
 
     @Override
     public void suppressLayout() {
-        binding.outPinBox.suppressLayout(true);
-        postDelayed(() -> binding.outPinBox.suppressLayout(false), 100);
+        binding.inPinBox.suppressLayout(true);
+        postDelayed(() -> binding.inPinBox.suppressLayout(false), 100);
     }
 }

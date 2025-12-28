@@ -31,8 +31,8 @@ import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 @SuppressLint("ViewConstructor")
 public class CustomActionCard extends ActionCard implements IDynamicPinCard {
     private CardCustomBinding binding;
-    private CustomActionCardRecycleViewAdapter horizontalAdapter;
-    private CustomActionCardRecycleViewAdapter verticalAdapter;
+    private CustomActionCardAdapter horizontalAdapter;
+    private CustomActionCardAdapter verticalAdapter;
 
     public CustomActionCard(Context context, Task task, Action action) {
         super(context, task, action);
@@ -41,8 +41,8 @@ public class CustomActionCard extends ActionCard implements IDynamicPinCard {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void init() {
-        horizontalAdapter = new CustomActionCardRecycleViewAdapter(this);
-        verticalAdapter = new CustomActionCardRecycleViewAdapter(this);
+        horizontalAdapter = new CustomActionCardAdapter(this);
+        verticalAdapter = new CustomActionCardAdapter(this);
         binding = CardCustomBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
         DragViewHolderHelper horizontalHelper = new DragViewHolderHelper(DragViewHolderHelper.VERTICAL, horizontalAdapter);

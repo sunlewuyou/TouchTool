@@ -5,11 +5,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -18,14 +16,13 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinLeftCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinTopCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
-import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 import top.bogey.touch_tool.utils.ui.IDragableRecycleViewAdapter;
 
-public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<CustomActionCardRecycleViewAdapter.ViewHolder> implements IDragableRecycleViewAdapter {
+public class CustomActionCardAdapter extends RecyclerView.Adapter<CustomActionCardAdapter.ViewHolder> implements IDragableRecycleViewAdapter {
     private final List<PinView> pinViews = new ArrayList<>();
-    private final ActionCard card;
+    protected final ActionCard card;
 
-    public CustomActionCardRecycleViewAdapter(ActionCard card) {
+    public CustomActionCardAdapter(ActionCard card) {
         this.card = card;
     }
 

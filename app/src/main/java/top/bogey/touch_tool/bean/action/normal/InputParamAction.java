@@ -3,6 +3,7 @@ package top.bogey.touch_tool.bean.action.normal;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -79,6 +80,13 @@ public class InputParamAction extends ExecuteAction {
     private int getTypeValue() {
         PinSingleSelect type = posTypePin.getValue();
         return type.getIndex();
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        //todo: 2025/12/26 ~ 2026/1/26 输入参数已弃用
+        result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_action_deprecated_error);
     }
 
     private static class PosShowablePin extends ShowAblePin {

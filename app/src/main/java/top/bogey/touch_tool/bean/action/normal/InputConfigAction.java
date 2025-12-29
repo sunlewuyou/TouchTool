@@ -7,26 +7,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.blueprint.card.FloatInputConfigActionCard;
+import top.bogey.touch_tool.utils.EAnchor;
 
 public class InputConfigAction extends ExecuteAction implements DynamicPinsAction {
+    private final transient Pin posTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
+    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
+    private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
+    private final transient Pin showPosPin = new PosShowablePin(new PinPoint(0, 0), R.string.screen_anchor_pos, false, false, true);
+    private final transient Pin savePin = new NotLinkAblePin(new PinBoolean(true), R.string.input_config_action_save, false, false, true);
+    private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.input_config_action_timeout, false, false, true);
+
 
     public InputConfigAction() {
         super(ActionType.INPUT_CONFIG);
+        addPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin);
     }
 
     public InputConfigAction(JsonObject jsonObject) {
         super(jsonObject);
+        reAddPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -44,7 +62,15 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
             inPin.getValue().sync(pinValue);
         });
 
-        FloatInputConfigActionCard.showInputConfig(runnable.getTask(), this, result -> runnable.resume());
+        PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
+        if (getTypeValue() == 0) {
+            FloatInputConfigActionCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> runnable.resume());
+        } else {
+            PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+            PinSingleSelect gravity = getPinValue(runnable, gravityPin);
+            PinPoint showPos = getPinValue(runnable, showPosPin);
+            FloatInputConfigActionCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> runnable.resume(), EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], showPos.getValue());
+        }
         runnable.await();
 
         outPins.forEach((uid, outPin) -> {
@@ -53,17 +79,20 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
         });
 
         // 将当前值保存一下
-        Task task = runnable.getTask();
-        Task topTask = task.getTopParent();
-        Task saveTask = TaskSaver.getInstance().getTask(topTask.getId());
-        Task currentTask = saveTask.downFindTask(task.getId());
-        Action action = currentTask.getAction(getId());
-        if (action instanceof InputConfigAction inputConfigAction) {
-            for (Pin dynamicPin : inputConfigAction.getDynamicPins()) {
-                Pin pinById = getPinById(dynamicPin.getId());
-                dynamicPin.getValue().sync(pinById.getValue());
+        PinBoolean save = getPinValue(runnable, savePin);
+        if (save.getValue()) {
+            Task task = runnable.getTask();
+            Task topTask = task.getTopParent();
+            Task saveTask = TaskSaver.getInstance().getTask(topTask.getId());
+            Task currentTask = saveTask.downFindTask(task.getId());
+            Action action = currentTask.getAction(getId());
+            if (action instanceof InputConfigAction inputConfigAction) {
+                for (Pin dynamicPin : inputConfigAction.getDynamicPins()) {
+                    Pin pinById = getPinById(dynamicPin.getId());
+                    dynamicPin.getValue().sync(pinById.getValue());
+                }
+                saveTask.save();
             }
-            saveTask.save();
         }
 
         executeNext(runnable, outPin);
@@ -75,7 +104,7 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
         boolean start = false;
         for (Pin pin : getPins()) {
             if (start) pins.add(pin);
-            if (pin == outPin) start = true;
+            if (pin == timeoutPin) start = true;
         }
         return pins;
     }
@@ -108,6 +137,23 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
                 if (dynamicPin.getTitle().equals(title)) continue;
                 dynamicPin.setTitle(title);
             }
+        }
+    }
+
+    private int getTypeValue() {
+        PinSingleSelect type = posTypePin.getValue();
+        return type.getIndex();
+    }
+
+    private static class PosShowablePin extends ShowAblePin {
+        public PosShowablePin(PinBase value, int titleId, boolean out, boolean dynamic, boolean hide) {
+            super(value, titleId, out, dynamic, hide);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            InputConfigAction action = (InputConfigAction) context.getAction(getOwnerId());
+            return action.getTypeValue() == 1;
         }
     }
 }

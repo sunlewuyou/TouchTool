@@ -58,6 +58,7 @@ public class InputConfigActionCard extends ActionCard implements IDynamicPinCard
         initDelete(binding.removeButton);
         initLock(binding.lockButton);
         initPosView(binding.position);
+        initCopy(binding.copyButton);
 
         binding.addButton.setOnClickListener(v -> {
             Pin inPin = new Pin(new PinString(), 0, false, true);
@@ -108,7 +109,9 @@ public class InputConfigActionCard extends ActionCard implements IDynamicPinCard
             pinView = adapter.addPin(pin);
             if (pinView instanceof PinCustomView customView) {
                 MaterialButton typeView = customView.getTypeView();
-                typeView.setVisibility(GONE);
+                if (typeView != null) typeView.setVisibility(GONE);
+                MaterialButton visibleButton = customView.getVisibleButton();
+                if (visibleButton != null) visibleButton.setVisibility(GONE);
             }
         } else {
             if (pin.isOut()) {
@@ -153,7 +156,7 @@ public class InputConfigActionCard extends ActionCard implements IDynamicPinCard
     public boolean isEmptyPosition(float x, float y) {
         float scale = getScaleX();
 
-        List<MaterialButton> buttons = List.of(binding.expandButton, binding.addButton, binding.lockButton, binding.copyButton, binding.removeButton, binding.editButton);
+        List<MaterialButton> buttons = List.of(binding.addButton, binding.lockButton, binding.copyButton, binding.removeButton, binding.editButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
             float px = pointF.x * scale;

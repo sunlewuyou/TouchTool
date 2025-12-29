@@ -23,6 +23,7 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="?attr/defaultPadding"
             android:layout_weight="1"
+            android:minWidth="168dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <androidx.core.widget.NestedScrollView
@@ -40,13 +41,28 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/enterButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginHorizontal="?attr/defaultPadding"
-            android:text="@string/enter" />
+            android:layout_gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="?attr/defaultPadding"
+                app:icon="@drawable/icon_schedule" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/enterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="?attr/defaultPadding"
+                android:text="@string/enter" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

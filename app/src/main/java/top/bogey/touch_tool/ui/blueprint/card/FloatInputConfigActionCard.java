@@ -26,21 +26,36 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 @SuppressLint("ViewConstructor")
 public class FloatInputConfigActionCard extends ActionCard implements FloatInterface {
 
-    public static void showInputConfig(Task task, Action action, BooleanResultCallback callback) {
+    public static void showInputConfig(Task task, Action action, int timeout, BooleanResultCallback callback) {
+        showInputConfig(task, action, timeout, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
+    }
+
+    public static void showInputConfig(Task task, Action action, int timeout, BooleanResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            FloatInputConfigActionCard card = new FloatInputConfigActionCard(keepView.getThemeContext(), task, action, callback);
+            FloatInputConfigActionCard card = new FloatInputConfigActionCard(keepView.getThemeContext(), task, action, timeout, callback);
             card.show();
+            FloatWindow.setLocation(FloatInputConfigActionCard.class.getName(), anchor, gravity, location);
         });
     }
 
     private final BooleanResultCallback callback;
+    private int timeout;
+    private boolean canceled = false;
     private FloatInputConfigCardBinding binding;
 
-    public FloatInputConfigActionCard(Context context, Task task, Action action, BooleanResultCallback callback) {
+    public FloatInputConfigActionCard(Context context, Task task, Action action, int timeout, BooleanResultCallback callback) {
         super(context, task, action);
         this.callback = callback;
+        this.timeout = timeout;
+        if (timeout > 0) {
+            refreshTimeout();
+            binding.cancelButton.setOnClickListener(v -> {
+                canceled = true;
+                binding.cancelButton.setVisibility(GONE);
+            });
+        } else binding.cancelButton.setVisibility(GONE);
     }
 
     @Override
@@ -50,6 +65,19 @@ public class FloatInputConfigActionCard extends ActionCard implements FloatInter
             callback.onResult(true);
             dismiss();
         });
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void refreshTimeout() {
+        if (canceled) return;
+        if (timeout <= 0) {
+            callback.onResult(true);
+            dismiss();
+            return;
+        }
+        timeout -= 100;
+        binding.cancelButton.setText(String.format("%.1fs", timeout / 1000f));
+        postDelayed(this::refreshTimeout, 100);
     }
 
     @Override
@@ -84,7 +112,6 @@ public class FloatInputConfigActionCard extends ActionCard implements FloatInter
                 .setLayout(this)
                 .setTag(FloatInputConfigActionCard.class.getName())
                 .setLocation(EAnchor.CENTER, point.x, point.y)
-                .setSpecial(true)
                 .setExistEditText(true)
                 .setCallback(new ActionFloatViewCallback(FloatInputConfigActionCard.class.getName()))
                 .show();

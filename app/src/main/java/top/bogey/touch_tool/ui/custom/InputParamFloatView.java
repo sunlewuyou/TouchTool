@@ -35,14 +35,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
     private final Action action;
 
     public static void showInputParam(PinObject object, BooleanResultCallback callback) {
-        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
-        if (keepView == null) return;
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
-            InputParamFloatView inputParamView = new InputParamFloatView(keepView.getThemeContext());
-            inputParamView.show();
-            inputParamView.innerShowToast(object, callback, EAnchor.CENTER, EAnchor.CENTER, point);
-        });
+        showInputParam(object, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
     }
 
     public static void showInputParam(PinObject object, BooleanResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
@@ -51,7 +44,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
         new Handler(Looper.getMainLooper()).post(() -> {
             InputParamFloatView inputParamView = new InputParamFloatView(keepView.getThemeContext());
             inputParamView.show();
-            inputParamView.innerShowToast(object, callback, anchor, gravity, location);
+            inputParamView.innerShowInputParam(object, callback, anchor, gravity, location);
         });
     }
 
@@ -69,7 +62,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
         task.addAction(action);
     }
 
-    private void innerShowToast(PinObject object, BooleanResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+    private void innerShowInputParam(PinObject object, BooleanResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         FloatWindow.setLocation(InputParamFloatView.class.getName(), anchor, gravity, location);
         this.callback = callback;
 

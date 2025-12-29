@@ -28,14 +28,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     private StringResultCallback callback;
 
     public static void showChoice(List<Choice> choices, StringResultCallback callback) {
-        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
-        if (keepView == null) return;
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
-            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
-            choiceView.show();
-            choiceView.innerShowChoice(choices, callback, EAnchor.CENTER, EAnchor.CENTER, point);
-        });
+        showChoice(choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
     }
 
     public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {

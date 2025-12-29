@@ -2,42 +2,36 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?attr/materialCardViewFilledStyle"
-    android:layout_width="wrap_content"
+    android:layout_width="320dp"
     android:layout_height="wrap_content"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:paddingBottom="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             style="?attr/materialCardViewFilledStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="?attr/defaultPadding"
             android:layout_weight="1"
-            android:minWidth="168dp"
+            android:minWidth="198dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
-            <androidx.core.widget.NestedScrollView
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/inBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="?attr/defaultPadding">
-
-                <LinearLayout
-                    android:id="@+id/inBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-
-            </androidx.core.widget.NestedScrollView>
+                android:layout_marginVertical="?attr/defaultPadding"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start" />
 
         </com.google.android.material.card.MaterialCardView>
 

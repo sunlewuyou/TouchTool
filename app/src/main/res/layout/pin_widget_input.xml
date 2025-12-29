@@ -25,7 +25,8 @@
             android:gravity="center_vertical"
             android:inputType="text"
             android:minHeight="30dp"
-            android:padding="?attr/defaultPadding"
+            android:paddingHorizontal="?attr/defaultPadding"
+            android:paddingVertical="?attr/defaultOffset"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     </com.google.android.material.textfield.TextInputLayout>

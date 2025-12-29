@@ -59,6 +59,7 @@ public class InputConfigActionCard extends ActionCard implements IDynamicPinCard
         initLock(binding.lockButton);
         initPosView(binding.position);
         initCopy(binding.copyButton);
+        initExpand(binding.expandButton);
 
         binding.addButton.setOnClickListener(v -> {
             Pin inPin = new Pin(new PinString(), 0, false, true);
@@ -156,7 +157,7 @@ public class InputConfigActionCard extends ActionCard implements IDynamicPinCard
     public boolean isEmptyPosition(float x, float y) {
         float scale = getScaleX();
 
-        List<MaterialButton> buttons = List.of(binding.addButton, binding.lockButton, binding.copyButton, binding.removeButton, binding.editButton);
+        List<MaterialButton> buttons = List.of(binding.expandButton, binding.addButton, binding.lockButton, binding.copyButton, binding.removeButton, binding.editButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
             float px = pointF.x * scale;

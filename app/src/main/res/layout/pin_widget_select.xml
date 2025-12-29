@@ -6,13 +6,16 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/spinner"
-        style="?attr/materialButtonOutlinedStyle"
+        style="?attr/materialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="?attr/iconButtonSize"
         android:minWidth="?attr/iconButtonSize"
         android:paddingHorizontal="?attr/defaultPadding"
         android:paddingVertical="?attr/iconButtonPadding"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:icon="@drawable/icon_keyboard_arrow_down"
+        app:iconGravity="textEnd"
+        app:iconPadding="?attr/defaultOffset" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextBox"

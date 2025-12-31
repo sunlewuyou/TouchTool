@@ -309,12 +309,11 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 定时 ----------------------------------------------------------------------------- start
     private PendingIntent getAlarmPendingIntent(String taskId, String actionId) {
-        Intent intent = new Intent(this, InstantActivity.class);
-        intent.setAction(InstantActivity.INTENT_KEY_DO_ACTION);
+        Intent intent = new Intent(InstantActivity.INTENT_KEY_DO_ACTION);
         intent.putExtra(InstantActivity.TASK_ID, taskId);
         intent.putExtra(InstantActivity.ACTION_ID, actionId);
 
-        return PendingIntent.getActivity(this, Objects.hashCode(taskId + actionId), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(this, Objects.hashCode(taskId + actionId), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void resetAllAlarm() {
@@ -381,6 +380,7 @@ public class MainAccessibilityService extends AccessibilityService {
             if (manager.canScheduleExactAlarms()) {
                 AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
                 manager.setAlarmClock(clockInfo, pendingIntent);
+//                manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
             } else {
                 manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
             }

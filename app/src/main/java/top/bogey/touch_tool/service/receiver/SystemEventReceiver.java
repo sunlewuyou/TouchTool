@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.InstantActivity;
 
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;
@@ -50,6 +51,13 @@ public class SystemEventReceiver extends BroadcastReceiver {
                 if (device == null) return;
                 TaskInfoSummary.getInstance().setBluetoothInfo(device.getAddress(), device.getName(), action.equals(BluetoothDevice.ACTION_ACL_CONNECTED));
             }
+
+            case InstantActivity.INTENT_KEY_DO_ACTION -> {
+                String taskId = intent.getStringExtra(InstantActivity.TASK_ID);
+                String actionId = intent.getStringExtra(InstantActivity.ACTION_ID);
+                String pinId = intent.getStringExtra(InstantActivity.PIN_ID);
+                InstantActivity.doAction(taskId, actionId, pinId, null);
+            }
         }
     }
 
@@ -68,6 +76,8 @@ public class SystemEventReceiver extends BroadcastReceiver {
         // 蓝牙连接或断开
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        // 动作执行
+        filter.addAction(InstantActivity.INTENT_KEY_DO_ACTION);
 
         return filter;
     }

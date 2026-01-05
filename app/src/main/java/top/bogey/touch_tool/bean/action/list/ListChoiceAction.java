@@ -67,7 +67,7 @@ public class ListChoiceAction extends ListExecuteAction {
         AtomicReference<String> resultIndex = new AtomicReference<>();
 
         if (getTypeValue() == 0) {
-            ListChoiceFloatView.showChoice(choices, result -> {
+            ListChoiceFloatView.showChoice(getValidDescription(), choices, result -> {
                 resultIndex.set(result);
                 runnable.resume();
             });
@@ -75,7 +75,7 @@ public class ListChoiceAction extends ListExecuteAction {
             PinSingleSelect anchor = getPinValue(runnable, anchorPin);
             PinSingleSelect gravity = getPinValue(runnable, gravityPin);
             PinPoint point = getPinValue(runnable, posPin);
-            ListChoiceFloatView.showChoice(choices, result -> {
+            ListChoiceFloatView.showChoice(getValidDescription(), choices, result -> {
                 resultIndex.set(result);
                 runnable.resume();
             }, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], point.getValue());

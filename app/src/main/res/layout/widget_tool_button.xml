@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/link"

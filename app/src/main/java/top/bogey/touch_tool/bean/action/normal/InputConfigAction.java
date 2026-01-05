@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -16,6 +17,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
@@ -35,16 +37,17 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
     private final transient Pin showPosPin = new PosShowablePin(new PinPoint(0, 0), R.string.screen_anchor_pos, false, false, true);
     private final transient Pin savePin = new NotLinkAblePin(new PinBoolean(true), R.string.input_config_action_save, false, false, true);
     private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.input_config_action_timeout, false, false, true);
+    private final transient Pin elsePin = new Pin(new PinExecute(), R.string.input_config_action_else, true);
 
 
     public InputConfigAction() {
         super(ActionType.INPUT_CONFIG);
-        addPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin);
+        addPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin, elsePin);
     }
 
     public InputConfigAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin);
+        reAddPins(posTypePin, anchorPin, gravityPin, showPosPin, savePin, timeoutPin, elsePin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -63,39 +66,48 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
         });
 
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
+        AtomicBoolean aResult = new AtomicBoolean(false);
         if (getTypeValue() == 0) {
-            InputConfigActionFloatCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> runnable.resume());
+            InputConfigActionFloatCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> {
+                aResult.set(result);
+                runnable.resume();
+            });
         } else {
             PinSingleSelect anchor = getPinValue(runnable, anchorPin);
             PinSingleSelect gravity = getPinValue(runnable, gravityPin);
             PinPoint showPos = getPinValue(runnable, showPosPin);
-            InputConfigActionFloatCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> runnable.resume(), EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], showPos.getValue());
+            InputConfigActionFloatCard.showInputConfig(runnable.getTask(), this, timeout.intValue(), result -> {
+                aResult.set(result);
+                runnable.resume();
+            }, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], showPos.getValue());
         }
         runnable.await();
+        if (aResult.get()) {
+            outPins.forEach((uid, outPin) -> {
+                Pin inPin = inPins.get(uid);
+                if (inPin != null) outPin.getValue().sync(inPin.getValue());
+            });
 
-        outPins.forEach((uid, outPin) -> {
-            Pin inPin = inPins.get(uid);
-            if (inPin != null) outPin.getValue().sync(inPin.getValue());
-        });
-
-        // 将当前值保存一下
-        PinBoolean save = getPinValue(runnable, savePin);
-        if (save.getValue()) {
-            Task task = runnable.getTask();
-            Task topTask = task.getTopParent();
-            Task saveTask = TaskSaver.getInstance().getTask(topTask.getId());
-            Task currentTask = saveTask.downFindTask(task.getId());
-            Action action = currentTask.getAction(getId());
-            if (action instanceof InputConfigAction inputConfigAction) {
-                for (Pin dynamicPin : inputConfigAction.getDynamicPins()) {
-                    Pin pinById = getPinById(dynamicPin.getId());
-                    dynamicPin.getValue().sync(pinById.getValue());
+            // 将当前值保存一下
+            PinBoolean save = getPinValue(runnable, savePin);
+            if (save.getValue()) {
+                Task task = runnable.getTask();
+                Task topTask = task.getTopParent();
+                Task saveTask = TaskSaver.getInstance().getTask(topTask.getId());
+                Task currentTask = saveTask.downFindTask(task.getId());
+                Action action = currentTask.getAction(getId());
+                if (action instanceof InputConfigAction inputConfigAction) {
+                    for (Pin dynamicPin : inputConfigAction.getDynamicPins()) {
+                        Pin pinById = getPinById(dynamicPin.getId());
+                        dynamicPin.getValue().sync(pinById.getValue());
+                    }
+                    saveTask.save();
                 }
-                saveTask.save();
             }
+            executeNext(runnable, outPin);
+        } else {
+            executeNext(runnable, elsePin);
         }
-
-        executeNext(runnable, outPin);
     }
 
     @Override
@@ -104,7 +116,7 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
         boolean start = false;
         for (Pin pin : getPins()) {
             if (start) pins.add(pin);
-            if (pin == timeoutPin) start = true;
+            if (pin == elsePin) start = true;
         }
         return pins;
     }

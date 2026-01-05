@@ -18,6 +18,7 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinInputConfigView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.custom.ActionFloatViewCallback;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -56,6 +57,16 @@ public class InputConfigActionFloatCard extends ActionCard implements FloatInter
                 binding.cancelButton.setVisibility(GONE);
             });
         } else binding.cancelButton.setVisibility(GONE);
+
+        binding.title.setText(action.getValidDescription());
+        setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
+        setElevation(0);
+        setStrokeWidth(0);
+
+        binding.closeButton.setOnClickListener(v -> {
+            callback.onResult(false);
+            dismiss();
+        });
     }
 
     @Override

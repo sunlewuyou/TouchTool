@@ -67,7 +67,7 @@ public class PinPoint extends PinScaleAble<Point> {
         Point point = super.getValue();
         float scale = getScale();
         if (scale != 1) {
-            point = new Point((int) (point.x / scale), (int) (point.y / scale));
+            point = new Point((int) (point.x * scale), (int) (point.y * scale));
         }
         return new Point(point.x, point.y);
     }

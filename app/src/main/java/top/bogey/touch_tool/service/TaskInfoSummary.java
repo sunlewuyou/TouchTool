@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ApplicationQuitStartAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
@@ -340,7 +341,7 @@ public class TaskInfoSummary {
         }
         List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
         tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle(), null)));
-        ChoiceExecuteFloatView.showChoice(choices, result -> {
+        ChoiceExecuteFloatView.showChoice(service.getString(R.string.execute_task_action), choices, result -> {
             Action action = tasks.keySet().stream().filter(a -> a.getId().equals(result)).findFirst().orElse(null);
             if (action == null) return;
             Task task = tasks.get(action);

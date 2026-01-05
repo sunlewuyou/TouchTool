@@ -105,9 +105,15 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         });
 
         binding.closeButton.setOnClickListener(v -> {
-            refreshExpand(false);
-            refreshCorner(false);
-            toDockSide();
+            if (isNotPlayHide) {
+                isNotPlayHide = false;
+                animate().alpha(1f);
+                startNotPlayHide();
+            } else {
+                refreshExpand(false);
+                refreshCorner(false);
+                toDockSide();
+            }
         });
 
         binding.closeButton.setOnLongClickListener(v -> {
@@ -259,9 +265,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             handler.postDelayed(() -> {
                 int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
                 animate().alpha(alpha / 100f);
-                refreshExpand(false);
                 isNotPlayHide = true;
-            }, 5000);
+            }, 10000);
         }
     }
 
@@ -327,7 +332,10 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                 refreshPlayButton();
             }
         }
+
         handler.removeCallbacksAndMessages(null);
+        animate().alpha(1f);
+        isNotPlayHide = false;
     }
 
     @Override

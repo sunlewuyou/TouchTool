@@ -46,6 +46,8 @@ public class PinString extends PinObject {
     public void sync(PinBase value) {
         if (value instanceof PinString pinString) {
             this.value = pinString.value;
+        } else if (value != null) {
+            this.value = value.toString();
         }
     }
 

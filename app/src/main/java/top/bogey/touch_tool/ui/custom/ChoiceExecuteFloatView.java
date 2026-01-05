@@ -27,17 +27,17 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     private final FloatChoiceExecuteBinding binding;
     private StringResultCallback callback;
 
-    public static void showChoice(List<Choice> choices, StringResultCallback callback) {
-        showChoice(choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
+    public static void showChoice(String title, List<Choice> choices, StringResultCallback callback) {
+        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
     }
 
-    public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+    public static void showChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
             choiceView.show();
-            choiceView.innerShowChoice(choices, callback, anchor, gravity, location);
+            choiceView.innerShowChoice(title, choices, callback, anchor, gravity, location);
         });
     }
 
@@ -51,8 +51,9 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         });
     }
 
-    public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+    public void innerShowChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, gravity, location);
+        binding.title.setText(title);
 
         this.callback = callback;
         for (Choice choice : choices) {

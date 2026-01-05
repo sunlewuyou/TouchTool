@@ -29,12 +29,6 @@ public class PinTouchPath extends PinScaleAble<String> {
         super(PinType.TOUCH);
     }
 
-    public PinTouchPath(String value) {
-        super(PinType.TOUCH);
-        setValue(value);
-        pathParts = deserialize(value);
-    }
-
     public PinTouchPath(List<PathPart> paths) {
         super(PinType.TOUCH);
         pathParts = paths;

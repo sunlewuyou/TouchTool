@@ -70,7 +70,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
         AtomicReference<String> nextPinId = new AtomicReference<>();
 
         if (getTypeValue() == 0) {
-            ChoiceExecuteFloatView.showChoice(choices, result -> {
+            ChoiceExecuteFloatView.showChoice(getValidDescription(), choices, result -> {
                 nextPinId.set(result);
                 runnable.resume();
             });
@@ -78,7 +78,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
             PinSingleSelect anchor = getPinValue(runnable, anchorPin);
             PinSingleSelect gravity = getPinValue(runnable, gravityPin);
             PinPoint point = getPinValue(runnable, posPin);
-            ChoiceExecuteFloatView.showChoice(choices, result -> {
+            ChoiceExecuteFloatView.showChoice(getValidDescription(), choices, result -> {
                 nextPinId.set(result);
                 runnable.resume();
             }, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], point.getValue());

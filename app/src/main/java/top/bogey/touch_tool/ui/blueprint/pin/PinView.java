@@ -26,6 +26,7 @@ import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
+import top.bogey.touch_tool.bean.pin.special_pin.NotShowPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -146,6 +147,11 @@ public abstract class PinView extends FrameLayout implements PinListener {
 
     public void expand(Action.ExpandType expandType) {
         if (pin instanceof AlwaysShowPin) return;
+        if (pin instanceof NotShowPin) {
+            setVisibility(GONE);
+            return;
+        }
+
         if (pin.showAble(card.getTask())) {
             // 全显示
             if (expandType == Action.ExpandType.FULL) {

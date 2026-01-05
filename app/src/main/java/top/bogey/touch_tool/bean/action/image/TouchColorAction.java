@@ -15,7 +15,6 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
-import top.bogey.touch_tool.bean.action.parent.SyncAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
@@ -26,6 +25,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.bean.pin.special_pin.NotShowPin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
@@ -33,16 +33,15 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
-public class TouchColorAction extends ExecuteAction implements SyncAction {
+public class TouchColorAction extends ExecuteAction {
     private final transient Pin templatePin = new Pin(new PinColor(), R.string.touch_color_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.touch_color_action_similarity);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.touch_color_action_area, false, false, true);
-    private final transient Pin useAccPin = new NotLinkAblePin(new PinBoolean(true), R.string.touch_color_action_use_accessibility, false, false, true);
+    private final transient Pin useAccPin = new NotShowPin(new PinBoolean(true), R.string.touch_color_action_use_accessibility, false, false, true);
     private final transient Pin offsetPin = new Pin(new PinBoolean(), R.string.touch_color_action_offset);
     private final transient Pin touchAllPin = new NotLinkAblePin(new PinBoolean(false), R.string.touch_color_action_touch_all);
     private final transient Pin touchIntervalPin = new TouchIntervalShowablePin(new PinInteger(300), R.string.touch_color_action_touch_interval);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.if_action_else, true);
-
 
     public TouchColorAction() {
         super(ActionType.TOUCH_COLOR);
@@ -114,18 +113,11 @@ public class TouchColorAction extends ExecuteAction implements SyncAction {
     @Override
     public void check(ActionCheckResult result, Task task) {
         super.check(result, task);
-        if (!useAccPin.getValue(PinBoolean.class).getValue()) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             List<Action> actions = task.getActions(SwitchCaptureAction.class);
             if (actions.isEmpty()) {
                 result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_need_capture_warning);
             }
-        }
-    }
-
-    @Override
-    public void sync(Task context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            useAccPin.getValue(PinBoolean.class).setValue(false);
         }
     }
 

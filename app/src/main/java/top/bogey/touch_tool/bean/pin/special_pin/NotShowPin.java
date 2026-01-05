@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 
-/*
+/**
  * 永不显示的Pin，用来代替删除针脚的功能
  */
 public class NotShowPin extends NotLinkAblePin {

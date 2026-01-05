@@ -83,7 +83,7 @@ public class SendNotificationAction extends ExecuteAction {
             intent.putExtra(InstantActivity.TASK_ID, runnable.getTask().getId());
             intent.putExtra(InstantActivity.ACTION_ID, getId());
             intent.putExtra(InstantActivity.PIN_ID, executePin.getId());
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
             builder.setContentIntent(pendingIntent);
         }
         notificationManager.notify(getId().hashCode(), builder.build());

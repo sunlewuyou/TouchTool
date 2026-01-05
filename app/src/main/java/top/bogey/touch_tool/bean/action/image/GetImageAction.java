@@ -45,7 +45,6 @@ public class GetImageAction extends ExecuteOrCalculateAction {
     @Override
     protected void doAction(TaskRunnable runnable, Pin pin) {
         PinArea area = getPinValue(runnable, areaPin);
-        PinBoolean useAcc = getPinValue(runnable, useAccPin);
         Rect areaRect = area.getValue();
         MainAccessibilityService service = MainApplication.getInstance().getService();
 

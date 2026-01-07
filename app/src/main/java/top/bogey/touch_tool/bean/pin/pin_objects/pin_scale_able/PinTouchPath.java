@@ -227,6 +227,7 @@ public class PinTouchPath extends PinScaleAble<String> {
     }
 
     private static String serialize(List<PathPart> pathParts) {
+        if (pathParts == null || pathParts.isEmpty()) return "";
         StringBuilder builder = new StringBuilder();
         for (PathPart part : pathParts) {
             builder.append(part.toString()).append("|");

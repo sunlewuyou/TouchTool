@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint;
 
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -220,6 +221,20 @@ public class BlueprintView extends Fragment {
             return false;
         }
     };
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (DisplayUtil.isPortrait(requireContext())) {
+            DisplayUtil.setViewHeight(binding.toolBar, (int) DisplayUtil.dp2px(requireContext(), 56));
+            DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
+            DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
+        } else {
+            DisplayUtil.setViewHeight(binding.toolBar, (int) DisplayUtil.dp2px(requireContext(), 48));
+            DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
+            DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
+        }
+    }
 
     @Nullable
     @Override

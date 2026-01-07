@@ -8,11 +8,16 @@ public class DragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
     public static final int HORIZONTAL = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     public static final int VERTICAL = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
 
-    private final IDragableRecycleViewAdapter adapter;
+    private final IDragAbleRecycleViewAdapter adapter;
 
-    public DragViewHolderHelper(int dragDirs, IDragableRecycleViewAdapter adapter) {
+    public DragViewHolderHelper(int dragDirs, IDragAbleRecycleViewAdapter adapter) {
         super(dragDirs, 0);
         this.adapter = adapter;
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return adapter.isLongPressDragEnabled();
     }
 
     @Override

@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,9 +18,9 @@ import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.ui.IDragableRecycleViewAdapter;
+import top.bogey.touch_tool.utils.ui.IDragAbleRecycleViewAdapter;
 
-public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.ViewHolder> implements IDragableRecycleViewAdapter {
+public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.ViewHolder> implements IDragAbleRecycleViewAdapter {
 
     private final TaskView taskView;
     private final Set<String> selectedTags = new HashSet<>();

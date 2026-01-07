@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
@@ -31,9 +30,9 @@ import top.bogey.touch_tool.databinding.ViewTaskPageItemBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.ui.IDragableRecycleViewAdapter;
+import top.bogey.touch_tool.utils.ui.IDragAbleRecycleViewAdapter;
 
-public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener, IDragableRecycleViewAdapter {
+public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener, IDragAbleRecycleViewAdapter {
     private final TaskView taskView;
     private ItemTouchHelper helper;
 
@@ -122,6 +121,11 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
         }
         TagSaver.getInstance().setTaskOrder(tag, order);
         notifyItemMoved(from, to);
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

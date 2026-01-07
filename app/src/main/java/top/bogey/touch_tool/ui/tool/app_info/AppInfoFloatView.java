@@ -121,7 +121,7 @@ public class AppInfoFloatView extends FrameLayout implements FloatInterface, Res
             FloatWindow.setDragAble(tag, true);
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             if (!canDrag) return false;
-            if (lastX == 0 && lastY == 0) {
+            if ((lastX == 0 && lastY == 0) || (lastX == x && lastY == y)) {
                 lastX = x;
                 lastY = y;
                 return false;

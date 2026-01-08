@@ -73,13 +73,13 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             TaskRunnable taskRunnable = service.runTask(runnable.getTask(), new InnerStartAction(dynamicPin), new TaskListener() {
                 @Override
                 public void onExecute(TaskRunnable run, Action action, int progress) {
-                    if (runnable.isInterrupt()) run.stop();
+                    if (runnable.isCurrentInterrupt()) run.stop();
                 }
 
                 @Override
                 public void onFinish(TaskRunnable run) {
                     if (run.isDebug()) {
-                        List<LogInfo> logList = run.getLogList();
+                        List<LogInfo> logList = run.getCacheLogList();
                         List<String> logs = saveLogs(runnable, logList);
                         LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, runnable.getTask(), ParallelExecuteAction.this, true));
                         logInfo.setChildren(logs);

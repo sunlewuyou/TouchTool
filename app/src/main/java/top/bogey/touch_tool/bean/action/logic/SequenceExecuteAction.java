@@ -37,7 +37,7 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
     public void execute(TaskRunnable runnable, Pin pin) {
         Action startAction = runnable.getAction();
         for (Pin dynamicPin : getDynamicPins()) {
-            if (runnable.isInterrupt()) return;
+            if (runnable.isCurrentInterrupt()) return;
             if (!startAction.equals(runnable.getAction())) return;
             executeNext(runnable, dynamicPin);
         }

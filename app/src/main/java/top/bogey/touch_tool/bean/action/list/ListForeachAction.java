@@ -46,7 +46,7 @@ public class ListForeachAction extends ListExecuteAction {
             Action startAction = runnable.getAction();
             PinList list = getPinValue(runnable, listPin);
             for (int i = 0; i < list.size(); i++) {
-                if (runnable.isInterrupt()) return;
+                if (runnable.isCurrentInterrupt()) return;
                 if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 elementPin.setValue(returnValue(list.get(i)));
@@ -56,6 +56,7 @@ public class ListForeachAction extends ListExecuteAction {
             executeNext(runnable, completePin);
         } else {
             isBreak = true;
+            super.beforeExecuteNext(runnable, null);
         }
     }
 

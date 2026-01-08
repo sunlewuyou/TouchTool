@@ -48,7 +48,7 @@ public class MapForeachAction extends MapExecuteAction {
             Action startAction = runnable.getAction();
             PinMap map = getPinValue(runnable, mapPin);
             for (Map.Entry<PinObject, PinObject> entry : map.entrySet()) {
-                if (runnable.isInterrupt()) return;
+                if (runnable.isCurrentInterrupt()) return;
                 if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 keyPin.setValue(returnValue(entry.getKey()));
@@ -58,6 +58,7 @@ public class MapForeachAction extends MapExecuteAction {
             executeNext(runnable, completePin);
         } else {
             isBreak = true;
+            super.beforeExecuteNext(runnable, null);
         }
     }
 

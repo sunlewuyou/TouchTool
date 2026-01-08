@@ -51,7 +51,8 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
             }
         }
         beforeExecuteNext(runnable, null);
-        runnable.getTask().executeNext(runnable, pin, params);
+        runnable.getTask().setNext(params, pin);
+        runnable.stopCurrent();
     }
 
     @Override

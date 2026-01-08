@@ -22,15 +22,13 @@ import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.task.Task;
 
 public class TaskRunnable implements Runnable {
-    private final Stack<Task> taskStack = new Stack<>();
-    private final Stack<Action> actionStack = new Stack<>();
-
+    private final Stack<TaskContext> taskContextStack = new Stack<>();
     private final Set<ITaskListener> listeners = new HashSet<>();
 
     private final Task task;
     private final StartAction startAction;
     private final boolean debug;
-    private boolean skipLog = false;
+
 
     private int progress = 0;
 
@@ -39,9 +37,12 @@ public class TaskRunnable implements Runnable {
     private boolean paused;
     private long pauseTime = -1;
 
+    private boolean cacheLog = false;
+    private final List<LogInfo> cacheLogList = new ArrayList<>();
+
+    private boolean logged = false;
     private final Stack<LogInfo> logStack = new Stack<>();
     private final Stack<Integer> logStackIndex = new Stack<>();
-    private final List<LogInfo> logList = new ArrayList<>();
 
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
@@ -52,7 +53,7 @@ public class TaskRunnable implements Runnable {
     @Override
     public void run() {
         if (startAction instanceof InnerStartAction) {
-            skipLog = true;
+            cacheLog = true;
         }
         try {
             if (SettingSaver.getInstance().isLogResetOnStart()) {
@@ -79,50 +80,33 @@ public class TaskRunnable implements Runnable {
         while (!logStack.isEmpty()) {
             addLog(logStack.pop(), 0);
         }
-        if (!logList.isEmpty() && !(startAction instanceof InnerStartAction)) addLog(new LogInfo(new DateTimeLog()), 0);
+        if (logged) addLog(new LogInfo(new DateTimeLog()), 0);
 
         interrupt = true;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
     }
 
-    private synchronized void checkStatus() {
-        if (pauseTime >= 0) {
-            try {
-                paused = true;
-                wait(pauseTime);
-                pauseTime = -1;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void pushStack(Task task, Action action) {
-        taskStack.push(task);
-        actionStack.push(action);
-        if (debug) {
-            logStackIndex.push(logStack.size());
-        }
+        taskContextStack.push(new TaskContext(task, action));
+        if (debug) logStackIndex.push(logStack.size());
     }
 
     public void popStack() {
-        taskStack.pop();
-        actionStack.pop();
+        taskContextStack.pop();
         if (debug) {
             int index = logStackIndex.pop();
             while (logStack.size() > index) {
                 addLog(logStack.pop(), 0);
             }
         }
-        if (taskStack.isEmpty() || actionStack.isEmpty()) stop();
     }
 
     public Task getTask() {
-        return taskStack.peek();
+        return taskContextStack.peek().getTask();
     }
 
     public Action getAction() {
-        return actionStack.peek();
+        return taskContextStack.peek().getStartAction();
     }
 
     public Task getStartTask() {
@@ -164,11 +148,17 @@ public class TaskRunnable implements Runnable {
             }
             case 0 -> {
                 if (logStack.isEmpty()) {
-                    if (!skipLog) LogSaver.getInstance().addLog(task.getId(), logInfo, true);
-                    logList.add(logInfo);
+                    if (!cacheLog) {
+                        LogSaver.getInstance().addLog(task.getId(), logInfo, true);
+                        logged = true;
+                    }
+                    cacheLogList.add(logInfo);
                 } else {
                     logStack.peek().addChild(logInfo);
-                    if (!skipLog) LogSaver.getInstance().addLog(task.getId(), logInfo, false);
+                    if (!cacheLog) {
+                        LogSaver.getInstance().addLog(task.getId(), logInfo, false);
+                        logged = true;
+                    }
                 }
             }
             case 1 -> logStack.push(logInfo);
@@ -180,8 +170,8 @@ public class TaskRunnable implements Runnable {
         if (debug) addLog(new LogInfo(new ActionLog(progress + 1, getTask(), action, stackOption != 0)), stackOption);
     }
 
-    public List<LogInfo> getLogList() {
-        return logList;
+    public List<LogInfo> getCacheLogList() {
+        return cacheLogList;
     }
 
     public int getProgress() {
@@ -191,7 +181,32 @@ public class TaskRunnable implements Runnable {
     public void stop() {
         if (paused) resume();
         if (future != null) future.cancel(true);
+        taskContextStack.forEach(taskContext -> taskContext.setInterrupt(true));
         interrupt = true;
+    }
+
+    public void stopCurrent() {
+        taskContextStack.peek().setInterrupt(true);
+    }
+
+    public boolean isInterrupt() {
+        return interrupt;
+    }
+
+    public boolean isCurrentInterrupt() {
+        return interrupt || taskContextStack.peek().isInterrupt();
+    }
+
+    private synchronized void checkStatus() {
+        if (pauseTime >= 0) {
+            try {
+                paused = true;
+                wait(pauseTime);
+                pauseTime = -1;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void sleep(long time) {
@@ -239,15 +254,39 @@ public class TaskRunnable implements Runnable {
         }
     }
 
-    public boolean isInterrupt() {
-        return interrupt;
-    }
-
     public boolean isDebug() {
         return debug;
     }
 
     public void setFuture(Future<?> future) {
         this.future = future;
+    }
+
+    private static class TaskContext {
+        private final Task task;
+        private final Action startAction;
+
+        private boolean interrupt = false;
+
+        public TaskContext(Task task, Action startAction) {
+            this.task = task;
+            this.startAction = startAction;
+        }
+
+        public void setInterrupt(boolean interrupt) {
+            this.interrupt = interrupt;
+        }
+
+        public boolean isInterrupt() {
+            return interrupt;
+        }
+
+        public Task getTask() {
+            return task;
+        }
+
+        public Action getStartAction() {
+            return startAction;
+        }
     }
 }

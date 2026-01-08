@@ -75,6 +75,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
 
     @Override
     public void executeNext(TaskRunnable runnable, Pin pin) {
+        if (pin == null) return;
         if (isRealTimeMode(runnable.getTask())) return;
         Pin pinByUid = getPinByUid(pin.getUid());
         super.executeNext(runnable, pinByUid);
@@ -97,6 +98,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     }
 
     public void setParams(Map<String, PinObject> params) {
+        if (params == null) return;
         params.forEach((key, value) -> {
             Pin pin = getPinByUid(key);
             if (pin == null) return;

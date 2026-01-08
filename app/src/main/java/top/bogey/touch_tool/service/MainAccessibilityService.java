@@ -293,7 +293,7 @@ public class MainAccessibilityService extends AccessibilityService {
             if (runnable.isInterrupt()) continue;
 
             Task startTask = runnable.getStartTask();
-            if (task.getId().equals(startTask.getId())) {
+            if (task.equals(startTask)) {
                 runnable.stop();
             }
         }

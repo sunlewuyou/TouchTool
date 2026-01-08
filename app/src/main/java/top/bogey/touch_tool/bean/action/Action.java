@@ -227,7 +227,7 @@ public abstract class Action extends Identity implements PinListener {
     public void executeNext(TaskRunnable runnable, Pin pin) {
         beforeExecuteNext(runnable, pin);
 
-        if (runnable.isInterrupt()) return;
+        if (runnable.isCurrentInterrupt()) return;
         if (pin == null) return;
         if (!pin.isOut()) return;
 

@@ -51,7 +51,7 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
         PinBoolean allowRepeat = getPinValue(runnable, allowRepeatPin);
         List<Pin> dynamicPins = getDynamicPins();
         for (int i = 0; i < times.intValue(); i++) {
-            if (runnable.isInterrupt()) return;
+            if (runnable.isCurrentInterrupt()) return;
             if (!startAction.equals(runnable.getAction())) return;
             if (dynamicPins.isEmpty()) break;
             int index = random.nextInt(dynamicPins.size());

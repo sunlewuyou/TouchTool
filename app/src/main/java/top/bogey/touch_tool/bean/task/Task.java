@@ -51,7 +51,9 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     private int flag = 0;
 
     private transient Task parent;
-    private transient ExecuteTaskAction startAction = null;
+
+    private transient Map<String, PinObject> nextParams;
+    private transient Pin nextPin;
 
     public Task() {
         super();
@@ -405,29 +407,24 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Pin pin, Map<String, PinObject> params) {
         Task copy = copy();
-        copy.startAction = startAction;
+        boolean flag = false;
         for (Action action : copy.getActions(CustomStartAction.class)) {
             ((CustomStartAction) action).setParams(params);
             runnable.pushStack(copy, action);
             action.execute(runnable, pin);
-
-            // 如果没有正确的走结束执行，那么需要自动弹出一次
-            Action currStartAction = runnable.getAction();
-            if (currStartAction.equals(action)) {
-                runnable.popStack();
-                startAction.executeNext(runnable, startAction.getFirstOutExecutePin());
-            }
-
+            flag = true;
             break;
         }
+
+        if (flag) runnable.popStack();
+        startAction.setParams(nextParams);
+        if (nextPin == null) nextPin = startAction.getFirstOutExecutePin();
+        startAction.executeNext(runnable, nextPin);
     }
 
-    public void executeNext(TaskRunnable runnable, Pin pin, Map<String, PinObject> params) {
-        runnable.popStack();
-        if (startAction != null) {
-            startAction.setParams(params);
-            startAction.executeNext(runnable, pin);
-        }
+    public void setNext(Map<String, PinObject> nextParams, Pin nextPin) {
+        this.nextParams = nextParams;
+        this.nextPin = nextPin;
     }
 
     public long getCreateTime() {

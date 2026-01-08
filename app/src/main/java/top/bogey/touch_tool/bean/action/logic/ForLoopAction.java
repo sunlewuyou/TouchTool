@@ -48,7 +48,7 @@ public class ForLoopAction extends ExecuteAction {
 
             int currentValue = startValue;
             while (startValue <= endValue ? currentValue <= endValue : currentValue >= endValue) {
-                if (runnable.isInterrupt()) return;
+                if (runnable.isCurrentInterrupt()) return;
                 if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 currentPin.getValue(PinInteger.class).setValue(currentValue);
@@ -59,6 +59,7 @@ public class ForLoopAction extends ExecuteAction {
             executeNext(runnable, completePin);
         } else {
             isBreak = true;
+            super.beforeExecuteNext(runnable, null);
         }
     }
 

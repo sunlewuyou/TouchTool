@@ -34,7 +34,7 @@ public abstract class FindExecuteAction extends ExecuteAction {
         long startTime = System.currentTimeMillis();
         while (!found) {
             runnable.sleep(interval.intValue());
-            if (runnable.isInterrupt()) return;
+            if (runnable.isCurrentInterrupt()) return;
             if (timeout.intValue() < System.currentTimeMillis() - startTime) break;
             found = find(runnable);
         }

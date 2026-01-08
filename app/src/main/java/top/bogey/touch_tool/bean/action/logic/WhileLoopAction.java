@@ -34,7 +34,7 @@ public class WhileLoopAction extends ExecuteAction {
             Action startAction = runnable.getAction();
             PinBoolean condition = getPinValue(runnable, conditionPin);
             while (condition.getValue()) {
-                if (runnable.isInterrupt()) return;
+                if (runnable.isCurrentInterrupt()) return;
                 if (!startAction.equals(runnable.getAction())) return;
                 if (isBreak) break;
                 executeNext(runnable, outPin);
@@ -43,6 +43,7 @@ public class WhileLoopAction extends ExecuteAction {
             executeNext(runnable, completePin);
         } else {
             isBreak = true;
+            super.beforeExecuteNext(runnable, null);
         }
     }
 

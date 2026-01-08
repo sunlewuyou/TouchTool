@@ -45,6 +45,7 @@ public class ForLoopAction extends ExecuteAction {
             int endValue = end.intValue();
             int stepValue = step.intValue();
             if (stepValue == 0) stepValue = 1;
+            stepValue = Math.abs(stepValue);
 
             int currentValue = startValue;
             while (startValue <= endValue ? currentValue <= endValue : currentValue >= endValue) {

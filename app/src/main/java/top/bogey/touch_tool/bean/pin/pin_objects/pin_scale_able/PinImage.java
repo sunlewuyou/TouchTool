@@ -49,7 +49,7 @@ public class PinImage extends PinScaleAble<String> {
         pinImage.setScreen(screen);
         pinImage.setAnchor(anchor);
         pinImage.image = image;
-        pinImage.value = getValue();
+        pinImage.serialized = serialized;
         return pinImage;
     }
 

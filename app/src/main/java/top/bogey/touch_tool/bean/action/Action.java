@@ -267,8 +267,8 @@ public abstract class Action extends Identity implements PinListener {
                 Action action = runnable.getTask().getAction(linkedPin.getOwnerId());
                 if (action != null) {
                     T pinValue = action.getPinValue(runnable, linkedPin);
-                    pin.setValue(returnValue(pinValue));
-                    return returnValue(pinValue);
+                    pin.setValue(pinValue);
+                    return pinValue;
                 }
             }
         }

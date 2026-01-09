@@ -88,6 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingHorizontal="?attr/defaultOffset"
         app:behavior_peekHeight="128dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 

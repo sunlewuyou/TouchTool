@@ -4,25 +4,25 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp">
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
 
     <LinearLayout
         android:id="@+id/contentBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:gravity="center_vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="?attr/iconButtonSize"
-            android:layout_height="?attr/iconButtonSize"
-            android:padding="?attr/iconButtonPadding"
+            android:layout_width="?attr/smallIconButtonSize"
+            android:layout_height="?attr/smallIconButtonSize"
             app:srcCompat="@drawable/icon_keyboard_arrow_down"
             app:tint="?attr/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/visibleButton"
             style="?attr/iconButton"
+            android:layout_height="?attr/smallIconButtonSize"
             android:translationX="-8dp"
             app:icon="@drawable/icon_visibility" />
 
@@ -40,6 +40,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/infoButton"
             style="?attr/iconButton"
+            android:layout_height="?attr/smallIconButtonSize"
             app:icon="@drawable/icon_info" />
 
     </LinearLayout>

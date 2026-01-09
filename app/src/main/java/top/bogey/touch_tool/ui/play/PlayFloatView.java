@@ -334,7 +334,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         }
 
         handler.removeCallbacksAndMessages(null);
-        animate().alpha(1f);
+        post(() -> animate().alpha(1f));
         isNotPlayHide = false;
     }
 

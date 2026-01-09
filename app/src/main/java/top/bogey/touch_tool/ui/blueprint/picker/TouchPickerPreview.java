@@ -49,8 +49,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
         });
 
         binding.pickerButton.setOnClickListener(v -> new TouchPicker(context, result -> {
-            touchPath.setValue(result.getValue());
-            touchPath.setAnchor(result.getAnchor());
+            touchPath.setValue(result.getAnchor(), result.getValue());
             binding.pathView.setPath(result.getPathParts());
         }, touchPath).show());
     }

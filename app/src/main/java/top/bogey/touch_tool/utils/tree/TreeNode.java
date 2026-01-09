@@ -77,4 +77,12 @@ public abstract class TreeNode {
             child.setDepth(depth + 1);
         }
     }
+
+    public boolean isFirstChild() {
+        return parent != null && parent.getChildren().get(0) == this;
+    }
+
+    public boolean isLastChild() {
+        return parent != null && parent.getChildren().get(parent.getChildren().size() - 1) == this;
+    }
 }

@@ -17,12 +17,12 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.GsonUtil;
 
+// 屏幕区域得实时获取才能兼容横竖屏
 public class PinArea extends PinScaleAble<Rect> {
-    private final static Rect SCREEN_AREA = DisplayUtil.getScreenArea(MainApplication.getInstance());
 
     public PinArea() {
         super(PinType.AREA);
-        value = SCREEN_AREA;
+        value = getScreenArea();
     }
 
     public PinArea(Rect area) {
@@ -32,13 +32,13 @@ public class PinArea extends PinScaleAble<Rect> {
 
     public PinArea(JsonObject jsonObject) {
         super(jsonObject);
-        value = GsonUtil.getAsObject(jsonObject, "value", Rect.class, SCREEN_AREA);
+        value = GsonUtil.getAsObject(jsonObject, "value", Rect.class, getScreenArea());
     }
 
     @Override
     public void reset() {
         super.reset();
-        value = SCREEN_AREA;
+        value = getScreenArea();
     }
 
     @Override
@@ -69,6 +69,16 @@ public class PinArea extends PinScaleAble<Rect> {
         return super.toString() + "(" + area.left + "," + area.top + "," + area.right + "," + area.bottom + ")";
     }
 
+    private static boolean isFullScreen(Rect area) {
+        Rect screenArea = getScreenArea();
+        Rect otherDirectionScreenArea = new Rect(0, 0, screenArea.height(), screenArea.width());
+        return area.isEmpty() || screenArea.equals(area) || otherDirectionScreenArea.equals(area);
+    }
+
+    private static Rect getScreenArea() {
+        return DisplayUtil.getScreenArea(MainApplication.getInstance());
+    }
+
     @Override
     public Rect getValue() {
         Rect area = super.getValue();
@@ -76,6 +86,7 @@ public class PinArea extends PinScaleAble<Rect> {
         if (scale != 1) {
             area = new Rect((int) (area.left * scale), (int) (area.top * scale), (int) (area.right * scale), (int) (area.bottom * scale));
         }
+        if (isFullScreen(area)) return getScreenArea();
         return new Rect(area);
     }
 

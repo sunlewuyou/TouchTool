@@ -417,9 +417,9 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         }
 
         if (flag) runnable.popStack();
-        startAction.setParams(nextParams);
-        if (nextPin == null) nextPin = startAction.getFirstOutExecutePin();
-        startAction.executeNext(runnable, nextPin);
+        startAction.setParams(copy.nextParams);
+        if (copy.nextPin == null) copy.nextPin = startAction.getFirstOutExecutePin();
+        startAction.executeNext(runnable, copy.nextPin);
     }
 
     public void setNext(Map<String, PinObject> nextParams, Pin nextPin) {

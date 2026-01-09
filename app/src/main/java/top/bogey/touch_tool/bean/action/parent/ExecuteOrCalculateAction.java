@@ -40,13 +40,14 @@ public abstract class ExecuteOrCalculateAction extends Action {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        if (isRealtimeMode()) return;
         doAction(runnable, pin);
         executeNext(runnable, outPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        doAction(runnable, pin);
+        if (isRealtimeMode()) doAction(runnable, pin);
     }
 
     protected abstract void doAction(TaskRunnable runnable, Pin pin);

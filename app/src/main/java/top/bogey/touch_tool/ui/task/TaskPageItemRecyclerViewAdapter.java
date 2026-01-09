@@ -72,8 +72,14 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
     public void onUpdate(Task task) {
         int index = tasks.indexOf(task);
         if (index != -1) {
-            tasks.set(index, task);
-            AppUtil.runOnUiThread(() -> notifyItemChanged(index));
+            if (TaskSaver.matchTag(tag, task.getTags())) {
+                tasks.set(index, task);
+                AppUtil.runOnUiThread(() -> notifyItemChanged(index));
+            } else {
+                onRemove(task);
+            }
+        } else {
+            onCreate(task);
         }
     }
 

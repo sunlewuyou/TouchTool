@@ -67,7 +67,7 @@ public class IsOcrTextExistAction extends CalculateAction implements SyncAction 
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         String packageName = ocrApps.get(type.getIndex());
-        service.runOcr(packageName, bitmap, result -> {
+        service.runOcr(bitmap, packageName, result -> {
             ocrResultsReference.set(result);
             pause.set(false);
             runnable.resume();

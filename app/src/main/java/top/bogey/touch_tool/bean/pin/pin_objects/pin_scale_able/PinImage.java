@@ -50,6 +50,7 @@ public class PinImage extends PinScaleAble<String> {
         pinImage.setAnchor(anchor);
         pinImage.image = image;
         pinImage.serialized = serialized;
+        pinImage.value = value;
         return pinImage;
     }
 

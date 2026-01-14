@@ -102,7 +102,7 @@ public class AreaPickerPreview extends BasePicker<Rect> {
                 Bitmap bitmap = service.tryGetScreenShot();
                 if (bitmap != null) {
                     Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-                    service.runOcr(ocrApps.get(ocrAppIndex), clipBitmap, result -> {
+                    service.runOcr(clipBitmap, ocrApps.get(ocrAppIndex), result -> {
                         StringBuilder builder = new StringBuilder();
                         int value = (int) binding.timeSlider.getValue();
                         for (OcrResult ocrResult : result) {

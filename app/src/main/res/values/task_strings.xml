@@ -626,6 +626,13 @@
     <string name="parse_qrcode_action_image">图片</string>
     <string name="parse_qrcode_action_content">内容</string>
 
+    <string name="yolo_detect_action">目标识别</string>
+    <string name="yolo_detect_action_desc">识别图片中的目标</string>
+    <string name="yolo_detect_action_model">模型</string>
+    <string name="yolo_detect_action_similarity">置信度</string>
+    <string name="yolo_detect_action_target">所有目标</string>
+    <string name="yolo_detect_action_area">所有区域</string>
+
     <!-- 动作-Color -->
     <string name="get_color_action">获取颜色</string>
     <string name="get_color_action_desc">获取图片指定位置颜色</string>

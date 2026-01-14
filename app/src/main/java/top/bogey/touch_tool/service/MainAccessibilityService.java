@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.service;
 
+import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_PACKAGE;
+import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_SERVICE;
 import static top.bogey.touch_tool.service.TaskInfoSummary.OCR_SERVICE_ACTION;
 
 import android.accessibilityservice.AccessibilityService;
@@ -73,6 +75,8 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
+import top.bogey.yolo.IYolo;
+import top.bogey.yolo.IYoloCallback;
 
 public class MainAccessibilityService extends AccessibilityService {
     static {
@@ -551,7 +555,7 @@ public class MainAccessibilityService extends AccessibilityService {
     // Ocr ----------------------------------------------------------------------------- start
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
 
-    public synchronized void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
+    public synchronized void runOcr(Bitmap bitmap, String packageName, ResultCallback<List<OcrResult>> callback) {
         if (bitmap == null) {
             callback.onResult(new ArrayList<>());
             return;
@@ -603,6 +607,69 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     // Ocr ----------------------------------------------------------------------------- end
+
+    // Yolo ----------------------------------------------------------------------------- start
+    private IYolo yolo;
+
+    private void initYoloService(BooleanResultCallback callback) {
+        if (yolo == null || !yolo.asBinder().isBinderAlive()) {
+            ServiceConnection connection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    yolo = IYolo.Stub.asInterface(service);
+                    callback.onResult(true);
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    yolo = null;
+                }
+            };
+
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(YOLO_APP_PACKAGE, YOLO_APP_SERVICE));
+            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) callback.onResult(false);
+        } else {
+            callback.onResult(true);
+        }
+    }
+
+    public synchronized void runYolo(Bitmap bitmap, String modelName, int similarity, ResultCallback<List<YoloResult>> callback) {
+        if (bitmap == null) {
+            callback.onResult(new ArrayList<>());
+            return;
+        }
+
+        initYoloService(result -> {
+            if (result) {
+                try {
+                    yolo.runYolo(bitmap, modelName, similarity / 100f, new IYoloCallback.Stub() {
+                        @Override
+                        public void onResult(List<YoloResult> result) {
+                            callback.onResult(result);
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    callback.onResult(new ArrayList<>());
+                }
+            }
+        });
+    }
+
+    public synchronized void getYoloModelList(ResultCallback<List<String>> callback) {
+        initYoloService(result -> {
+            if (result) {
+                try {
+                    callback.onResult(yolo.getModelList());
+                } catch (RemoteException e) {
+                    callback.onResult(new ArrayList<>());
+                }
+            }
+        });
+    }
+
+    // Yolo ----------------------------------------------------------------------------- end
 
     // 按键 ----------------------------------------------------------------------------- start
     private Handler handler;

@@ -154,6 +154,7 @@ public enum ActionType {
     TOUCH_IMAGE,
     CREATE_QRCODE,
     PARSE_QRCODE,
+    YOLO_DETECT,
 
     // 颜色
     GET_COLOR,

@@ -50,7 +50,6 @@ public class ActionMap {
 
                     ActionType.INPUT_CONFIG,
                     ActionType.STOP_TASK,
-                    ActionType.MARK_AREA,
                     ActionType.SHOW_TEXT
             ));
 
@@ -173,6 +172,7 @@ public class ActionMap {
                     ActionType.TOUCH_IMAGE,
                     ActionType.CREATE_QRCODE,
                     ActionType.PARSE_QRCODE,
+                    ActionType.YOLO_DETECT,
                     ActionType.GET_COLOR,
                     ActionType.FIND_COLORS,
                     ActionType.IS_COLOR_EXIST,
@@ -188,7 +188,8 @@ public class ActionMap {
                     ActionType.GET_AREA_INTERSECTION,
                     ActionType.GET_AREA_CENTER,
                     ActionType.GET_AREA_RANDOM,
-                    ActionType.PICK_AREA
+                    ActionType.PICK_AREA,
+                    ActionType.MARK_AREA
             ));
 
             case POINT -> list.addAll(Arrays.asList(

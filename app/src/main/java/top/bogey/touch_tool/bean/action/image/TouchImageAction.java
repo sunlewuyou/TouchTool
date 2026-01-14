@@ -77,7 +77,6 @@ public class TouchImageAction extends ExecuteAction {
         executeNext(runnable, outPin);
     }
 
-
     @Override
     public void check(ActionCheckResult result, Task task) {
         super.check(result, task);

@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action.normal;
+package top.bogey.touch_tool.bean.action.area;
 
 import com.google.gson.JsonObject;
 

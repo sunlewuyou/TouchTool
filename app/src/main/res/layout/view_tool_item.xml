@@ -4,7 +4,8 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="?attr/minTouchTargetSize"
-    app:cardBackgroundColor="?attr/colorSurface"
+    android:layout_marginEnd="?attr/defaultPadding"
+    android:layout_marginBottom="?attr/defaultPadding"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
     <LinearLayout

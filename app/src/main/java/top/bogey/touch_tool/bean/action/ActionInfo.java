@@ -41,6 +41,7 @@ import top.bogey.touch_tool.bean.action.image.ResizeImageAction;
 import top.bogey.touch_tool.bean.action.image.SaveImageAction;
 import top.bogey.touch_tool.bean.action.image.TouchColorAction;
 import top.bogey.touch_tool.bean.action.image.TouchImageAction;
+import top.bogey.touch_tool.bean.action.image.YoloDetectAction;
 import top.bogey.touch_tool.bean.action.list.ListAddAction;
 import top.bogey.touch_tool.bean.action.list.ListAppendAction;
 import top.bogey.touch_tool.bean.action.list.ListChoiceAction;
@@ -90,7 +91,7 @@ import top.bogey.touch_tool.bean.action.node.NodeTouchAction;
 import top.bogey.touch_tool.bean.action.normal.DelayAction;
 import top.bogey.touch_tool.bean.action.normal.InputConfigAction;
 import top.bogey.touch_tool.bean.action.normal.LoggerAction;
-import top.bogey.touch_tool.bean.action.normal.MarkAreaAction;
+import top.bogey.touch_tool.bean.action.area.MarkAreaAction;
 import top.bogey.touch_tool.bean.action.normal.ShowTextAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAllAction;
@@ -221,7 +222,6 @@ public class ActionInfo {
     private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_note_stack, R.string.stick_close_action, R.string.stick_close_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_note_stack, R.string.stick_close_all_action, R.string.stick_close_all_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo INPUT_CONFIG_INFO = new ActionInfo(ActionType.INPUT_CONFIG, InputConfigAction.class, R.drawable.icon_edit, R.string.input_config_action, R.string.input_config_action_desc, 0, InputConfigActionCard.class);
-    private final static ActionInfo MARK_AREA_INFO = new ActionInfo(ActionType.MARK_AREA, MarkAreaAction.class, R.drawable.icon_area, R.string.mark_area_action, R.string.mark_area_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHOW_TEXT_INFO = new ActionInfo(ActionType.SHOW_TEXT, ShowTextAction.class, R.drawable.icon_edit, R.string.show_text_action, R.string.show_text_action_desc, 0, ShowTextActionCard.class);
 
 
@@ -333,6 +333,7 @@ public class ActionInfo {
     private final static ActionInfo TOUCH_IMAGE_INFO = new ActionInfo(ActionType.TOUCH_IMAGE, TouchImageAction.class, R.drawable.icon_touch_app, R.string.touch_image_action, R.string.touch_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CREATE_QRCODE_INFO = new ActionInfo(ActionType.CREATE_QRCODE, CreateQRCodeAction.class, R.drawable.icon_qr_code, R.string.create_qrcode_action, R.string.create_qrcode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PARSE_QRCODE_INFO = new ActionInfo(ActionType.PARSE_QRCODE, ParseQRCodeAction.class, R.drawable.icon_qr_code_scanner, R.string.parse_qrcode_action, R.string.parse_qrcode_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo YOLO_DETECT_INFO = new ActionInfo(ActionType.YOLO_DETECT, YoloDetectAction.class, R.drawable.icon_detection_and_zone, R.string.yolo_detect_action, R.string.yolo_detect_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo GET_COLOR_INFO = new ActionInfo(ActionType.GET_COLOR, GetColorAction.class, R.drawable.icon_palette, R.string.get_color_action, R.string.get_color_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_visibility, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
@@ -350,6 +351,7 @@ public class ActionInfo {
     private final static ActionInfo GET_AREA_CENTER_INFO = new ActionInfo(ActionType.GET_AREA_CENTER, GetAreaCenterAction.class, R.drawable.icon_my_location, R.string.get_area_center_action, R.string.get_area_center_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_RANDOM_INFO = new ActionInfo(ActionType.GET_AREA_RANDOM, GetAreaRandomAction.class, R.drawable.icon_area, R.string.get_area_random_action, R.string.get_area_random_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PICK_AREA_INFO = new ActionInfo(ActionType.PICK_AREA, PickAreaAction.class, R.drawable.icon_area, R.string.pick_area_action, R.string.pick_area_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MARK_AREA_INFO = new ActionInfo(ActionType.MARK_AREA, MarkAreaAction.class, R.drawable.icon_area, R.string.mark_area_action, R.string.mark_area_action_desc, 0, NormalActionCard.class);
 
 
     // 位置操作
@@ -431,7 +433,6 @@ public class ActionInfo {
             case CLOSE_STICK -> CLOSE_STICK_INFO;
             case CLOSE_ALL_STICK -> CLOSE_ALL_STICK_INFO;
             case INPUT_CONFIG -> INPUT_CONFIG_INFO;
-            case MARK_AREA -> MARK_AREA_INFO;
             case SHOW_TEXT -> SHOW_TEXT_INFO;
 
 
@@ -540,6 +541,7 @@ public class ActionInfo {
             case TOUCH_IMAGE -> TOUCH_IMAGE_INFO;
             case CREATE_QRCODE -> CREATE_QRCODE_INFO;
             case PARSE_QRCODE -> PARSE_QRCODE_INFO;
+            case YOLO_DETECT -> YOLO_DETECT_INFO;
 
 
             case GET_COLOR -> GET_COLOR_INFO;
@@ -557,6 +559,7 @@ public class ActionInfo {
             case GET_AREA_CENTER -> GET_AREA_CENTER_INFO;
             case GET_AREA_RANDOM -> GET_AREA_RANDOM_INFO;
             case PICK_AREA -> PICK_AREA_INFO;
+            case MARK_AREA -> MARK_AREA_INFO;
 
 
             case POINT_FROM_INT -> POINT_FROM_INT_INFO;

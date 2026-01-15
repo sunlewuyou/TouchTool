@@ -67,5 +67,4 @@ jobs:
         with:
           name: TouchTool-release-apk
           path: |
-            app/build/outputs/apk/release/*.apk
-            app/build/outputs/apk/release/*/*.apk
+            app/build/outputs/apk/release/**/*.APK

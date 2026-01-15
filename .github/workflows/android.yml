@@ -18,11 +18,11 @@ jobs:
         uses: actions/checkout@v4
 
       # 2) 设置 JDK
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       # 3) 安装 Android SDK 包并接受许可证
       - name: Setup Android SDK CLI
